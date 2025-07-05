@@ -1,17 +1,25 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Copy, CheckCircle } from 'lucide-react'
 
 interface DirectEntryProps {
   onDataExtracted: (data: any[]) => void
   tableType: 'payment' | 'courses'
   title: string
+  existingData?: any[] // Add this to preserve data when navigating back
+  preserveTextOnSuccess?: boolean // Add this to optionally keep text after success
 }
 
-export default function DirectEntry({ onDataExtracted, tableType, title }: DirectEntryProps) {
+export default function DirectEntry({ onDataExtracted, tableType, title, existingData, preserveTextOnSuccess = false }: DirectEntryProps) {
   const [pasteText, setPasteText] = useState('')
   const [isProcessing, setIsProcessing] = useState(false)
+  const [hasData, setHasData] = useState(false)
+
+  // Update hasData when existingData changes
+  useEffect(() => {
+    setHasData(Boolean(existingData && existingData.length > 0))
+  }, [existingData])
 
   // Handle copy-paste from student portal
   const handlePortalPaste = async () => {
@@ -25,7 +33,10 @@ export default function DirectEntry({ onDataExtracted, tableType, title }: Direc
       const data = parsePortalData(pasteText, tableType)
       if (data.length > 0) {
         onDataExtracted(data)
-        setPasteText('')
+        setHasData(true)
+        if (!preserveTextOnSuccess) {
+          setPasteText('')
+        }
         alert(`Successfully imported ${data.length} ${tableType === 'courses' ? 'courses' : 'payment items'}!`)
       } else {
         alert('No valid data found. Please check your pasted data format.')
@@ -44,6 +55,21 @@ export default function DirectEntry({ onDataExtracted, tableType, title }: Direc
         <Copy className="w-6 h-6 mr-2 text-blue-600" />
         {title}
       </h2>
+      
+      {/* Show existing data if available */}
+      {hasData && existingData && existingData.length > 0 && (
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+          <div className="flex items-center">
+            <div className="flex-1">
+              <h3 className="font-semibold text-green-800 mb-1">✅ Data Already Imported</h3>
+              <p className="text-sm text-green-700">
+                You have {existingData.length} {tableType === 'courses' ? 'courses' : 'payment items'} imported. 
+                You can re-import below if you need to update the data.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
       
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
         <div className="mb-4">

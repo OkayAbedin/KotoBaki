@@ -19,13 +19,32 @@ export default function CourseEditor({ initialCourses, availableCourseTypes, onC
   const [defaultWaiver, setDefaultWaiver] = useState(0)
 
   useEffect(() => {
-    // Auto-detect and set course types based on titles
-    const processedCourses = initialCourses.map(course => ({
-      ...course,
-      type: getAutomaticCourseType(course, availableCourseTypes),
-      waiverPercentage: 0
-    }))
-    setCourses(processedCourses)
+    // Initialize courses from initialCourses, preserving any existing edits
+    if (initialCourses.length > 0) {
+      const processedCourses = initialCourses.map(course => {
+        // Check if we already have this course with existing data
+        const existingCourse = courses.find(c => c.code === course.code)
+        if (existingCourse) {
+          // Preserve all existing changes
+          return existingCourse
+        } else {
+          // New course, auto-detect type and set defaults
+          return {
+            ...course,
+            type: getAutomaticCourseType(course, availableCourseTypes),
+            waiverPercentage: course.waiverPercentage || 0
+          }
+        }
+      })
+      
+      // Only update if the courses have actually changed
+      const currentCodesStr = courses.map(c => `${c.code}-${c.type}-${c.waiverPercentage}-${c.credits}`).sort().join(',')
+      const newCodesStr = processedCourses.map(c => `${c.code}-${c.type}-${c.waiverPercentage}-${c.credits}`).sort().join(',')
+      
+      if (currentCodesStr !== newCodesStr) {
+        setCourses(processedCourses)
+      }
+    }
   }, [initialCourses, availableCourseTypes])
 
   const updateCourseWaiver = (index: number, waiverPercentage: number) => {
