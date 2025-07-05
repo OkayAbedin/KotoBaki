@@ -29,6 +29,10 @@ export default function Home() {
     setStep(4)
   }
 
+  const handlePaymentInfoComplete = () => {
+    setStep(5)
+  }
+
   const handleCalculationComplete = (result: PaymentResult) => {
     setPaymentResult(result)
   }
@@ -52,8 +56,9 @@ export default function Home() {
             {[
               { number: 1, icon: Upload, title: "Payment Scheme" },
               { number: 2, icon: FileText, title: "Course Registration" },
-              { number: 3, icon: Edit3, title: "Review & Adjust" },
-              { number: 4, icon: Calculator, title: "Calculate Fees" }
+              { number: 3, icon: Edit3, title: "Review & Waivers" },
+              { number: 4, icon: DollarSign, title: "Payment Tracking" },
+              { number: 5, icon: Calculator, title: "Calculate Fees" }
             ].map((stepInfo) => (
               <div key={stepInfo.number} className="flex items-center">
                 <div
@@ -66,7 +71,7 @@ export default function Home() {
                 >
                   <stepInfo.icon size={20} />
                 </div>
-                {stepInfo.number < 4 && (
+                {stepInfo.number < 5 && (
                   <div
                     className={`w-16 h-1 transition-colors ${
                       step > stepInfo.number ? 'bg-blue-600' : 'bg-gray-300'
@@ -96,25 +101,14 @@ export default function Home() {
               onDataExtracted={(courses: any[]) => {
                 console.log('Course data extracted:', courses)
                 
-                // Convert to CourseData format with enhanced logging
-                const courseData: CourseData[] = courses.map((course: any) => {
-                  const processedCourse = {
-                    code: course.code,
-                    title: course.title,
-                    credits: course.credits,
-                    type: course.type as CourseData['type'],
-                    waiverPercentage: course.waiverPercentage || 0
-                  }
-                  
-                  // Log auto-detected course types
-                  const title = course.title.toLowerCase()
-                  if (title.includes('lab') || title.includes('project') || title.includes('thesis') || 
-                      title.includes('defence') || title.includes('fydp') || title.includes('internship')) {
-                    console.log(`Auto-detected: ${course.code} - ${course.title} → ${course.type}`)
-                  }
-                  
-                  return processedCourse
-                })
+                // Convert to CourseData format
+                const courseData: CourseData[] = courses.map((course: any) => ({
+                  code: course.code,
+                  title: course.title,
+                  credits: course.credits,
+                  type: course.type as CourseData['type'],
+                  waiverPercentage: course.waiverPercentage || 0
+                }))
                 
                 if (courseData.length === 0) {
                   alert('No courses found. Please try again.')
@@ -140,45 +134,63 @@ export default function Home() {
           )}
 
           {step === 4 && (
-            <div className="space-y-6">
-              {/* Optional Payment Tracking */}
-              <div className="bg-white rounded-lg shadow-lg p-6">
-                <h2 className="text-xl font-semibold mb-4 flex items-center">
-                  <DollarSign className="w-5 h-5 mr-2 text-green-600" />
-                  Payment Tracking (Optional)
-                </h2>
-                <p className="text-gray-600 mb-4">
-                  Enter the amount you've already paid to track your remaining balance.
-                </p>
+            <div className="bg-white rounded-lg shadow-lg p-8">
+              <h2 className="text-2xl font-semibold mb-4 flex items-center">
+                <DollarSign className="w-6 h-6 mr-2 text-green-600" />
+                Payment Tracking (Optional)
+              </h2>
+              <p className="text-gray-600 mb-6">
+                If you've already made any payments for this semester, enter the amount below to track your remaining balance.
+              </p>
+              
+              <div className="max-w-md">
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-gray-700 mb-3">
+                    Amount Already Paid (৳)
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    step="100"
+                    placeholder="0"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    onChange={(e) => setAmountAlreadyPaid(parseInt(e.target.value) || 0)}
+                    value={amountAlreadyPaid || ''}
+                  />
+                  <p className="text-sm text-gray-500 mt-2">
+                    Leave as 0 if you haven't paid anything yet
+                  </p>
+                </div>
                 
-                <div className="max-w-md">
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Amount Already Paid (৳)
-                    </label>
-                    <input
-                      type="number"
-                      min="0"
-                      step="100"
-                      placeholder="0"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      onChange={(e) => setAmountAlreadyPaid(parseInt(e.target.value) || 0)}
-                      value={amountAlreadyPaid || ''}
-                    />
-                    <p className="text-xs text-gray-500 mt-1">
-                      Leave as 0 if you haven't paid anything yet
-                    </p>
-                  </div>
+                <div className="flex gap-3">
+                  <button
+                    onClick={handlePaymentInfoComplete}
+                    className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center"
+                  >
+                    <Calculator className="w-5 h-5 mr-2" />
+                    Calculate Payment
+                  </button>
+                  <button
+                    onClick={() => {
+                      setAmountAlreadyPaid(0)
+                      handlePaymentInfoComplete()
+                    }}
+                    className="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition-colors"
+                  >
+                    Skip
+                  </button>
                 </div>
               </div>
-
-              <PaymentCalculator
-                courseData={courseData}
-                paymentSchemeData={paymentSchemeData}
-                amountAlreadyPaid={amountAlreadyPaid}
-                onCalculationComplete={handleCalculationComplete}
-              />
             </div>
+          )}
+
+          {step === 5 && (
+            <PaymentCalculator
+              courseData={courseData}
+              paymentSchemeData={paymentSchemeData}
+              amountAlreadyPaid={amountAlreadyPaid}
+              onCalculationComplete={handleCalculationComplete}
+            />
           )}
         </div>
       </div>

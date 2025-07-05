@@ -26,19 +26,7 @@ export default function DirectEntry({ onDataExtracted, tableType, title }: Direc
       if (data.length > 0) {
         onDataExtracted(data)
         setPasteText('')
-        if (tableType === 'courses') {
-          const autoDetected = data.filter(course => 
-            course.title.toLowerCase().includes('lab') || 
-            course.title.toLowerCase().includes('project') ||
-            course.title.toLowerCase().includes('thesis') ||
-            course.title.toLowerCase().includes('defence') ||
-            course.title.toLowerCase().includes('fydp') ||
-            course.title.toLowerCase().includes('internship')
-          ).length
-          alert(`Successfully imported ${data.length} courses! ${autoDetected} course types were automatically detected.`)
-        } else {
-          alert(`Successfully imported ${data.length} ${tableType} items!`)
-        }
+        alert(`Successfully imported ${data.length} ${tableType === 'courses' ? 'courses' : 'payment items'}!`)
       } else {
         alert('No valid data found. Please check your pasted data format.')
       }
@@ -66,16 +54,6 @@ export default function DirectEntry({ onDataExtracted, tableType, title }: Direc
             <p><strong>Step 3:</strong> Select the entire table (click and drag from top-left to bottom-right)</p>
             <p><strong>Step 4:</strong> Copy it (Ctrl+C or Cmd+C)</p>
             <p><strong>Step 5:</strong> Paste below and click "Process Data"</p>
-            {tableType === 'courses' && (
-              <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded text-xs">
-                <strong>Note:</strong> Course types will be automatically detected:
-                <ul className="mt-1 ml-4 list-disc">
-                  <li>"Lab" courses → Core Lab</li>
-                  <li>"Defence", "FYDP", "Project", "Thesis", "Internship" → Project/Internship</li>
-                  <li>Others → Core (default)</li>
-                </ul>
-              </div>
-            )}
           </div>
         </div>
         
