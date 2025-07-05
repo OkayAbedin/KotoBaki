@@ -80,7 +80,7 @@ export default function Home() {
                 <Calculator className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h1 className="text-lg font-semibold text-gray-900">DIU CSE Fee Calculator</h1>
+                <h1 className="text-lg font-semibold text-gray-900">KotoBaki</h1>
                 <p className="text-sm text-gray-500">Calculate your semester fees</p>
               </div>
             </div>
@@ -218,19 +218,7 @@ export default function Home() {
                 </div>
               )}
               
-              {/* Facebook-style navigation */}
-              <div className="flex justify-between items-center bg-white p-4 rounded-lg border border-gray-200">
-                <button
-                  onClick={() => navigateToStep(1)}
-                  className="flex items-center px-3 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded-md transition-colors"
-                >
-                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                  Back to Payment Scheme
-                </button>
-                <span className="text-sm text-gray-500">Step 2 of 5</span>
-              </div>
+
             </div>
           )}
 
@@ -238,26 +226,13 @@ export default function Home() {
             <div className="space-y-4">
               <CourseEditor
                 initialCourses={courseData}
-                availableCourseTypes={paymentSchemeData
+                availableCourseTypes={Array.from(new Set(paymentSchemeData
                   .filter(item => item.paymentName === 'Tuition Fee')
                   .map(item => item.courseCategory)
-                }
+                ))}
                 onCoursesUpdated={handleCoursesUpdated}
               />
-              
-              {/* Facebook-style navigation */}
-              <div className="flex justify-between items-center bg-white p-4 rounded-lg border border-gray-200">
-                <button
-                  onClick={() => navigateToStep(2)}
-                  className="flex items-center px-3 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded-md transition-colors"
-                >
-                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                  Back to Course Registration
-                </button>
-                <span className="text-sm text-gray-500">Step 3 of 5</span>
-              </div>
+
             </div>
           )}
 
@@ -335,20 +310,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              
-              {/* Navigation */}
-              <div className="flex justify-between items-center bg-white p-4 rounded-lg border border-gray-200">
-                <button
-                  onClick={() => navigateToStep(3)}
-                  className="flex items-center px-3 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded-md transition-colors"
-                >
-                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                  Back to Review Courses
-                </button>
-                <span className="text-sm text-gray-500">Step 4 of 5</span>
-              </div>
+
             </div>
           )}
 
@@ -360,31 +322,7 @@ export default function Home() {
                 amountAlreadyPaid={amountAlreadyPaid}
                 onCalculationComplete={handleCalculationComplete}
               />
-              
-              {/* Facebook-style final navigation */}
-              <div className="flex justify-between items-center bg-white p-4 rounded-lg border border-gray-200">
-                <div className="flex space-x-3">
-                  <button
-                    onClick={() => navigateToStep(4)}
-                    className="flex items-center px-3 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded-md transition-colors"
-                  >
-                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                    </svg>
-                    Back to Payment Tracking
-                  </button>
-                  <button
-                    onClick={() => navigateToStep(3)}
-                    className="flex items-center px-3 py-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors"
-                  >
-                    Edit Courses & Waivers
-                  </button>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                  <span className="text-sm text-green-600 font-medium">Step 5 of 5 - Complete!</span>
-                </div>
-              </div>
+
             </div>
           )}
         </div>
