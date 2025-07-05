@@ -20,10 +20,7 @@
     "postcss": "^8",
     "react": "^18",
     "react-dom": "^18",
-    "react-dropzone": "^14.2.3",
     "tailwindcss": "^3.4.1",
-    "tesseract.js": "^5.0.0",
-    "typescript": "^5",
-    "xlsx": "^0.18.5"
+    "typescript": "^5"
   }
 }

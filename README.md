@@ -1,23 +1,23 @@
 # DIU CSE Payment Calculator
 
-A modern web application that helps Daffodil International University (DIU) Computer Science & Engineering students calculate their semester payment fees automatically by processing uploaded images of payment schemes and course registrations.
+A modern web application that helps Daffodil International University (DIU) Computer Science & Engineering students calculate their semester payment fees by copying data directly from their student portal.
 
 ## Features
 
-- **Smart Image Processing**: Upload images of payment schemes and course registration documents
-- **OCR Text Extraction**: Automatically extract text from images using Tesseract.js
-- **Intelligent Course Recognition**: Automatically identify course codes, credits, and types
-- **Payment Calculation**: Calculate exact fees based on current DIU CSE fee structure
-- **Waiver Support**: Apply waiver percentages to tuition fees
-- **Payment Schedule**: Shows upfront payment and remaining balance before exams
+- **Direct Portal Integration**: Copy and paste payment schemes and course registration data directly from DIU student portal
+- **Smart Data Parsing**: Automatically parse tabular data from clipboard
+- **Dynamic Course Types**: Course types loaded from payment scheme data
+- **Individual Waivers**: Set waiver percentages (0-100% in 5% steps) per course
+- **Accurate Fee Calculation**: Calculate exact fees based on current DIU CSE fee structure
+- **Detailed Breakdowns**: Shows registration fees, tuition fees with/without waivers
+- **Payment Tracking**: Track amount already paid and remaining balance
 - **Modern UI**: Clean, responsive design with step-by-step wizard
 
 ## Technology Stack
 
 - **Frontend**: Next.js 15 with TypeScript
 - **Styling**: Tailwind CSS
-- **Image Processing**: Tesseract.js for OCR
-- **File Upload**: React Dropzone
+- **Icons**: Lucide React
 - **Icons**: Lucide React
 
 ## Fee Structure

@@ -46,4 +46,8 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
-test-data.js
+*.log
+
+# Project specific
+test-data.*
+backup-*
