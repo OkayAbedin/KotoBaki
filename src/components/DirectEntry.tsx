@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Copy, Table, Zap, Plus, Trash2 } from 'lucide-react'
+import { Copy, CheckCircle } from 'lucide-react'
 
 interface DirectEntryProps {
   onDataExtracted: (data: any[]) => void
@@ -10,414 +10,118 @@ interface DirectEntryProps {
 }
 
 export default function DirectEntry({ onDataExtracted, tableType, title }: DirectEntryProps) {
-  const [showCopyPaste, setShowCopyPaste] = useState(false)
-  const [showManualForm, setShowManualForm] = useState(false)
   const [pasteText, setPasteText] = useState('')
-
-  // Manual form states
-  const [manualEntries, setManualEntries] = useState<any[]>([])
-  const [currentEntry, setCurrentEntry] = useState<any>({})
+  const [isProcessing, setIsProcessing] = useState(false)
 
   // Handle copy-paste from student portal
-  const handlePortalPaste = () => {
+  const handlePortalPaste = async () => {
     if (!pasteText.trim()) {
       alert('Please paste some data first.')
       return
     }
 
+    setIsProcessing(true)
     try {
       const data = parsePortalData(pasteText, tableType)
       if (data.length > 0) {
         onDataExtracted(data)
         setPasteText('')
-        setShowCopyPaste(false)
-        alert(`Successfully imported ${data.length} ${tableType} items!`)
+        if (tableType === 'courses') {
+          const autoDetected = data.filter(course => 
+            course.title.toLowerCase().includes('lab') || 
+            course.title.toLowerCase().includes('project') ||
+            course.title.toLowerCase().includes('thesis') ||
+            course.title.toLowerCase().includes('defence') ||
+            course.title.toLowerCase().includes('fydp') ||
+            course.title.toLowerCase().includes('internship')
+          ).length
+          alert(`Successfully imported ${data.length} courses! ${autoDetected} course types were automatically detected.`)
+        } else {
+          alert(`Successfully imported ${data.length} ${tableType} items!`)
+        }
       } else {
-        alert('No valid data found. Try the manual entry option below.')
+        alert('No valid data found. Please check your pasted data format.')
       }
     } catch (error) {
       console.error('Parsing error:', error)
-      alert('Could not parse the data. Please try manual entry.')
+      alert('Could not parse the data. Please check the format and try again.')
+    } finally {
+      setIsProcessing(false)
     }
-  }
-
-  // Add manual entry
-  const addManualEntry = () => {
-    if (tableType === 'payment') {
-      if (!currentEntry.name || !currentEntry.amount) {
-        alert('Please fill in payment name and amount.')
-        return
-      }
-      setManualEntries([...manualEntries, {
-        name: currentEntry.name,
-        amount: parseInt(currentEntry.amount) || 0,
-        type: currentEntry.type || 'other'
-      }])
-    } else {
-      if (!currentEntry.code || !currentEntry.title || !currentEntry.credits) {
-        alert('Please fill in course code, title, and credits.')
-        return
-      }
-      setManualEntries([...manualEntries, {
-        code: currentEntry.code.toUpperCase(),
-        title: currentEntry.title,
-        credits: parseInt(currentEntry.credits) || 3,
-        type: currentEntry.type || 'Core Theory',
-        waiverPercentage: 0
-      }])
-    }
-    setCurrentEntry({})
-  }
-
-  const removeEntry = (index: number) => {
-    setManualEntries(manualEntries.filter((_, i) => i !== index))
-  }
-
-  const submitManualEntries = () => {
-    if (manualEntries.length === 0) {
-      alert('Please add at least one entry.')
-      return
-    }
-    onDataExtracted(manualEntries)
-    setManualEntries([])
-    setShowManualForm(false)
-    alert(`Successfully added ${manualEntries.length} ${tableType} items!`)
   }
 
   return (
-    <div className="space-y-6">
-      <h3 className="text-xl font-semibold text-gray-800">{title}</h3>
+    <div className="bg-white rounded-lg shadow-lg p-8">
+      <h2 className="text-2xl font-semibold mb-4 flex items-center">
+        <Copy className="w-6 h-6 mr-2 text-blue-600" />
+        {title}
+      </h2>
       
-      {/* Input Methods */}
-      {tableType === 'payment' ? (
-        // For payment scheme - only copy-paste option
-        <div className="max-w-2xl mx-auto">
-          <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-6">
-            <h4 className="font-semibold text-blue-800 mb-3 flex items-center">
-              <Copy className="w-5 h-5 mr-2" />
-              📋 Copy from Student Portal
-            </h4>
-            
-            <div className="space-y-3">
-              <p className="text-sm text-blue-700">
-                Copy your payment scheme table directly from your student portal for the most accurate calculation
-              </p>
-              
-              <button
-                onClick={() => setShowCopyPaste(!showCopyPaste)}
-                className="w-full bg-blue-600 text-white px-4 py-3 rounded hover:bg-blue-700 transition-colors text-sm"
-              >
-                {showCopyPaste ? 'Hide Paste Area' : 'Paste Payment Scheme Data'}
-              </button>
-
-              <div className="text-xs text-blue-600 space-y-1">
-                <div>💡 <strong>How to copy from portal:</strong></div>
-                <div>1. Go to your student portal payment section</div>
-                <div>2. Select the payment scheme table</div>
-                <div>3. Copy (Ctrl+C)</div>
-                <div>4. Paste below and click Process</div>
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+        <div className="mb-4">
+          <h3 className="font-semibold text-blue-800 mb-2">📋 Copy from Student Portal</h3>
+          <div className="text-sm text-blue-700 space-y-1">
+            <p><strong>Step 1:</strong> Go to your DIU student portal</p>
+            <p><strong>Step 2:</strong> Find the {tableType === 'payment' ? 'payment scheme' : 'course registration'} table</p>
+            <p><strong>Step 3:</strong> Select the entire table (click and drag from top-left to bottom-right)</p>
+            <p><strong>Step 4:</strong> Copy it (Ctrl+C or Cmd+C)</p>
+            <p><strong>Step 5:</strong> Paste below and click "Process Data"</p>
+            {tableType === 'courses' && (
+              <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded text-xs">
+                <strong>Note:</strong> Course types will be automatically detected:
+                <ul className="mt-1 ml-4 list-disc">
+                  <li>"Lab" courses → Core Lab</li>
+                  <li>"Defence", "FYDP", "Project", "Thesis", "Internship" → Project/Internship</li>
+                  <li>Others → Core (default)</li>
+                </ul>
               </div>
-            </div>
+            )}
           </div>
         </div>
-      ) : (
-        // For courses - keep both options
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          
-          {/* Method 1: Copy from Portal */}
-          <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-6">
-            <h4 className="font-semibold text-blue-800 mb-3 flex items-center">
-              <Copy className="w-5 h-5 mr-2" />
-              📋 Copy from Portal (Recommended)
-            </h4>
-            
-            <div className="space-y-3">
-              <p className="text-sm text-blue-700">
-                Copy table data directly from your student portal - most accurate method
-              </p>
-              
-              <button
-                onClick={() => setShowCopyPaste(!showCopyPaste)}
-                className="w-full bg-blue-600 text-white px-4 py-3 rounded hover:bg-blue-700 transition-colors text-sm"
-              >
-                {showCopyPaste ? 'Hide Paste Area' : 'Paste Portal Data'}
-              </button>
-
-              <div className="text-xs text-blue-600 space-y-1">
-                <div>💡 <strong>How to:</strong></div>
-                <div>1. Select table on portal</div>
-                <div>2. Copy (Ctrl+C)</div>
-                <div>3. Paste here</div>
-                <div>4. Click Process</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Method 2: Manual Entry */}
-          <div className="bg-green-50 border-2 border-green-200 rounded-lg p-6">
-            <h4 className="font-semibold text-green-800 mb-3 flex items-center">
-              <Table className="w-5 h-5 mr-2" />
-              ✏️ Manual Entry
-            </h4>
-            
-            <div className="space-y-3">
-              <p className="text-sm text-green-700">
-                Type in your data manually - best for small amounts or when copy-paste doesn&apos;t work
-              </p>
-              
-              <button
-                onClick={() => setShowManualForm(!showManualForm)}
-                className="w-full bg-green-600 text-white px-4 py-3 rounded hover:bg-green-700 transition-colors text-sm"
-              >
-                {showManualForm ? 'Hide Form' : 'Enter Manually'}
-              </button>
-
-              <div className="text-xs text-green-600">
-                Simple form with dropdowns - add one item at a time
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Copy-Paste Area */}
-      {showCopyPaste && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h5 className="font-medium text-blue-800 mb-3">📋 Paste Your Portal Data:</h5>
-          
-          <div className="bg-white border border-blue-300 rounded p-3 mb-3">
-            <div className="text-sm text-blue-700 mb-2">
-              <strong>Instructions:</strong>
-            </div>
-            <ol className="text-xs text-blue-600 space-y-1 list-decimal list-inside">
-              <li>Go to your student portal</li>
-              <li>Find the {tableType === 'payment' ? 'payment scheme' : 'course registration'} table</li>
-              <li>Select the entire table (click and drag)</li>
-              <li>Copy it (Ctrl+C or Cmd+C)</li>
-              <li>Paste below and click Process</li>
-            </ol>
-          </div>
-          
-          <textarea
-            value={pasteText}
-            onChange={(e) => setPasteText(e.target.value)}
-            placeholder={tableType === 'payment' 
-              ? "Paste your payment table here...\nExample:\nAdmission Fee    15000\nTuition Fee    45000\nLab Fee    5000"
-              : "Paste your course table here...\nExample:\nCSE110    Computer Programming    3\nCSE111    Programming Lab    1"
-            }
-            className="w-full h-32 p-3 border border-blue-300 rounded font-mono text-sm"
-          />
-          
-          <div className="flex gap-2 mt-3">
-            <button
-              onClick={handlePortalPaste}
-              disabled={!pasteText.trim()}
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
-            >
-              Process Pasted Data
-            </button>
-            <button
-              onClick={() => setPasteText('')}
-              className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors"
-            >
-              Clear
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Manual Form - For payment entries */}
-      {showManualForm && tableType === 'payment' && (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-          <h5 className="font-medium text-green-800 mb-3">✏️ Manual Entry Form:</h5>
-          
-          {/* Entry Form */}
-          <div className="bg-white border border-green-300 rounded p-4 mb-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <input
-                type="text"
-                placeholder="Payment Name (e.g., Tuition Fee)"
-                value={currentEntry.name || ''}
-                onChange={(e) => setCurrentEntry({...currentEntry, name: e.target.value})}
-                className="px-3 py-2 border border-gray-300 rounded"
-              />
-              <input
-                type="number"
-                placeholder="Amount (e.g., 45000)"
-                value={currentEntry.amount || ''}
-                onChange={(e) => setCurrentEntry({...currentEntry, amount: e.target.value})}
-                className="px-3 py-2 border border-gray-300 rounded"
-              />
-              <select
-                value={currentEntry.type || 'other'}
-                onChange={(e) => setCurrentEntry({...currentEntry, type: e.target.value})}
-                className="px-3 py-2 border border-gray-300 rounded"
-              >
-                <option value="registration">Registration</option>
-                <option value="tuition">Tuition</option>
-                <option value="lab">Lab</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-            
-            <button
-              onClick={addManualEntry}
-              className="mt-3 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors flex items-center"
-            >
-              <Plus className="w-4 h-4 mr-1" />
-              Add Entry
-            </button>
-          </div>
-
-          {/* Current Entries */}
-          {manualEntries.length > 0 && (
-            <div className="bg-white border border-green-300 rounded p-4 mb-4">
-              <h6 className="font-medium text-green-800 mb-2">Added Entries ({manualEntries.length}):</h6>
-              <div className="space-y-2 max-h-32 overflow-y-auto">
-                {manualEntries.map((entry, index) => (
-                  <div key={index} className="flex items-center justify-between bg-gray-50 p-2 rounded">
-                    <span className="text-sm">
-                      {`${entry.name} - ৳${entry.amount}`}
-                    </span>
-                    <button
-                      onClick={() => removeEntry(index)}
-                      className="text-red-600 hover:text-red-800"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className="flex gap-2">
-            <button
-              onClick={submitManualEntries}
-              disabled={manualEntries.length === 0}
-              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 disabled:opacity-50 transition-colors"
-            >
-              Use These Entries ({manualEntries.length})
-            </button>
-            <button
-              onClick={() => setManualEntries([])}
-              className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors"
-            >
-              Clear All
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Manual Form - For course entries */}
-      {showManualForm && tableType === 'courses' && (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-          <h5 className="font-medium text-green-800 mb-3">✏️ Manual Entry Form:</h5>
-          
-          {/* Entry Form */}
-          <div className="bg-white border border-green-300 rounded p-4 mb-4">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-                <input
-                  type="text"
-                  placeholder="Course Code (e.g., CSE110)"
-                  value={currentEntry.code || ''}
-                  onChange={(e) => setCurrentEntry({...currentEntry, code: e.target.value})}
-                  className="px-3 py-2 border border-gray-300 rounded"
-                />
-                <input
-                  type="text"
-                  placeholder="Course Title"
-                  value={currentEntry.title || ''}
-                  onChange={(e) => setCurrentEntry({...currentEntry, title: e.target.value})}
-                  className="px-3 py-2 border border-gray-300 rounded"
-                />
-                <input
-                  type="number"
-                  placeholder="Credits"
-                  min="1"
-                  max="6"
-                  value={currentEntry.credits || ''}
-                  onChange={(e) => setCurrentEntry({...currentEntry, credits: e.target.value})}
-                  className="px-3 py-2 border border-gray-300 rounded"
-                />
-                <select
-                  value={currentEntry.type || 'Core Theory'}
-                  onChange={(e) => setCurrentEntry({...currentEntry, type: e.target.value})}
-                  className="px-3 py-2 border border-gray-300 rounded"
-                >
-                  <option value="Core Theory">Core Theory</option>
-                  <option value="Core Lab">Core Lab</option>
-                  <option value="GED Lab">GED Lab</option>
-                  <option value="General Course">General Course</option>
-                  <option value="Project/Internship">Project/Internship</option>
-                </select>
-              </div>
-            
-            <button
-              onClick={addManualEntry}
-              className="mt-3 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors flex items-center"
-            >
-              <Plus className="w-4 h-4 mr-1" />
-              Add Entry
-            </button>
-          </div>
-
-          {/* Current Entries */}
-          {manualEntries.length > 0 && (
-            <div className="bg-white border border-green-300 rounded p-4 mb-4">
-              <h6 className="font-medium text-green-800 mb-2">Added Entries ({manualEntries.length}):</h6>
-              <div className="space-y-2 max-h-32 overflow-y-auto">
-                {manualEntries.map((entry, index) => (
-                  <div key={index} className="flex items-center justify-between bg-gray-50 p-2 rounded">
-                    <span className="text-sm">
-                      {`${entry.code} - ${entry.title} (${entry.credits} credits)`}
-                    </span>
-                    <button
-                      onClick={() => removeEntry(index)}
-                      className="text-red-600 hover:text-red-800"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className="flex gap-2">
-            <button
-              onClick={submitManualEntries}
-              disabled={manualEntries.length === 0}
-              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 disabled:opacity-50 transition-colors"
-            >
-              Use These Entries ({manualEntries.length})
-            </button>
-            <button
-              onClick={() => setManualEntries([])}
-              className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors"
-            >
-              Clear All
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Help Section */}
-      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-        <h5 className="font-medium text-gray-800 mb-2 flex items-center">
-          <Zap className="w-4 h-4 mr-1" />
-          💡 Need Help?
-        </h5>
-        <div className="text-sm text-gray-700 space-y-1">
-          <div><strong>Copy-Paste not working?</strong> Try manual entry - it&apos;s quick!</div>
-          <div><strong>Have questions?</strong> The data format is very flexible</div>
+        
+        <textarea
+          value={pasteText}
+          onChange={(e) => setPasteText(e.target.value)}
+          placeholder={tableType === 'payment' 
+            ? "Paste your payment scheme table here...\n\nExample:\nSL\tPayment name\tCourse Type\tCourse Category\tAmount\n1\tAdmission Fee\tOthers\tOthers\t15000\n2\tTuition Fee\tCourse Fee\tCore\t4900"
+            : "Paste your course registration table here...\n\nExample:\nSL\tCourse Code\tCourse Title\tCredit\tType\tSection\tTeacher\n1\tCSE110\tComputer Programming\t3\tREGULAR\t61_A\tTeacher Name\n2\tCSE111\tComputer Programming Lab\t1\tREGULAR\t61_A\tTeacher Name"
+          }
+          className="w-full h-40 p-4 border border-blue-300 rounded-lg font-mono text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          disabled={isProcessing}
+        />
+        
+        <div className="flex gap-3 mt-4">
+          <button
+            onClick={handlePortalPaste}
+            disabled={!pasteText.trim() || isProcessing}
+            className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
+          >
+            {isProcessing ? (
+              <>
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                Processing...
+              </>
+            ) : (
+              <>
+                <CheckCircle className="w-5 h-5 mr-2" />
+                Process Data
+              </>
+            )}
+          </button>
+          <button
+            onClick={() => setPasteText('')}
+            disabled={isProcessing}
+            className="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 disabled:opacity-50 transition-colors"
+          >
+            Clear
+          </button>
         </div>
       </div>
     </div>
   )
 }
 
-// Parse data copied from student portal
+// Parse portal data function with enhanced course type detection
 function parsePortalData(text: string, tableType: string): any[] {
   const data = []
   const lines = text.split('\n').filter(line => line.trim())
@@ -493,11 +197,14 @@ function parsePortalData(text: string, tableType: string): any[] {
       }
       
       if (courseCode && title && credits > 0) {
+        // Automatic course type detection
+        const detectedType = determineCourseType(courseCode, title)
+        
         data.push({
           code: courseCode.toUpperCase(),
           title: title,
           credits: credits,
-          type: 'Core', // Default type, will be updated in CourseEditor
+          type: detectedType,
           section: section,
           teacher: teacher,
           waiverPercentage: 0
@@ -509,31 +216,55 @@ function parsePortalData(text: string, tableType: string): any[] {
   return data
 }
 
-function categorizePaymentType(name: string): string {
-  const lower = name.toLowerCase()
-  if (lower.includes('tuition')) return 'tuition'
-  if (lower.includes('admission')) return 'registration'
-  if (lower.includes('lab')) return 'lab'
-  return 'other'
-}
-
+// Enhanced course type detection with comprehensive keyword matching
 function determineCourseType(code: string, title: string): string {
   const lowerTitle = title.toLowerCase()
   const lowerCode = code.toLowerCase()
   
+  // Check for lab courses - highest priority
   if (lowerTitle.includes('lab') || lowerCode.includes('lab')) {
-    if (lowerTitle.includes('ged')) return 'GED Lab'
+    if (lowerTitle.includes('ged') || lowerCode.includes('ged')) return 'GED Lab'
     return 'Core Lab'
   }
   
-  if (lowerTitle.includes('project') || lowerTitle.includes('thesis') || 
-      lowerTitle.includes('fyp') || code.includes('499')) {
-    return 'Project/Internship'
+  // Check for project/thesis/internship courses
+  if (lowerTitle.includes('project') || 
+      lowerTitle.includes('thesis') || 
+      lowerTitle.includes('fyp') || 
+      lowerTitle.includes('fydp') ||
+      lowerTitle.includes('defence') ||
+      lowerTitle.includes('defense') ||
+      lowerTitle.includes('internship') ||
+      lowerTitle.includes('practicum') ||
+      lowerTitle.includes('capstone') ||
+      lowerCode.includes('499') || 
+      lowerCode.includes('498') ||
+      lowerCode.includes('497') ||
+      lowerCode.includes('496')) {
+    return 'Project/Thesis/Internship'
   }
   
-  if (lowerTitle.includes('general') || lowerTitle.includes('ged')) {
+  // Check for general education courses
+  if (lowerTitle.includes('general') || 
+      lowerTitle.includes('ged') ||
+      lowerCode.includes('ged') ||
+      lowerCode.includes('gen') ||
+      lowerTitle.includes('english') ||
+      lowerTitle.includes('bangladesh') ||
+      lowerTitle.includes('philosophy') ||
+      lowerTitle.includes('sociology') ||
+      lowerTitle.includes('psychology')) {
     return 'General Course'
   }
   
-  return 'Core Theory'
+  // Check for non-core courses
+  if (lowerTitle.includes('non core') || 
+      lowerTitle.includes('noncore') ||
+      lowerTitle.includes('elective') ||
+      lowerTitle.includes('optional')) {
+    return 'Non Core'
+  }
+  
+  // Default to Core for regular theory courses
+  return 'Core'
 }
