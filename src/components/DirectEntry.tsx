@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Copy, CheckCircle } from 'lucide-react'
+import { Copy, CheckCircle, Check } from 'lucide-react'
 
 interface DirectEntryProps {
   onDataExtracted: (data: any[]) => void
@@ -50,75 +50,107 @@ export default function DirectEntry({ onDataExtracted, tableType, title, existin
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-8">
-      <h2 className="text-2xl font-semibold mb-4 flex items-center">
-        <Copy className="w-6 h-6 mr-2 text-blue-600" />
-        {title}
-      </h2>
-      
-      {/* Show existing data if available */}
-      {hasData && existingData && existingData.length > 0 && (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
-          <div className="flex items-center">
-            <div className="flex-1">
-              <h3 className="font-semibold text-green-800 mb-1">✅ Data Already Imported</h3>
-              <p className="text-sm text-green-700">
-                You have {existingData.length} {tableType === 'courses' ? 'courses' : 'payment items'} imported. 
-                You can re-import below if you need to update the data.
-              </p>
+    <div className="bg-white rounded-lg border border-gray-200">
+      {/* Header */}
+      <div className="px-4 py-3 border-b border-gray-200">
+        <div className="flex items-center">
+          <div className="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center mr-3">
+            <Copy className="w-4 h-4 text-white" />
+          </div>
+          <div>
+            <h2 className="text-base font-semibold text-gray-900">{title}</h2>
+            <p className="text-sm text-gray-500">Copy and paste data from your student portal</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="p-4">
+        {/* Success message */}
+        {hasData && existingData && existingData.length > 0 && (
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+            <div className="flex items-start">
+              <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                <Check className="w-4 h-4 text-green-600" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-medium text-green-800">Data Successfully Imported</h3>
+                <p className="text-sm text-green-700 mt-1">
+                  You have imported <span className="font-medium">{existingData.length}</span> {tableType === 'courses' ? 'courses' : 'payment items'}. 
+                  You can re-import below if you need to update the data.
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-      
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-        <div className="mb-4">
-          <h3 className="font-semibold text-blue-800 mb-2">📋 Copy from Student Portal</h3>
-          <div className="text-sm text-blue-700 space-y-1">
-            <p><strong>Step 1:</strong> Go to your DIU student portal</p>
-            <p><strong>Step 2:</strong> Find the {tableType === 'payment' ? 'payment scheme' : 'course registration'} table</p>
-            <p><strong>Step 3:</strong> Select the entire table (click and drag from top-left to bottom-right)</p>
-            <p><strong>Step 4:</strong> Copy it (Ctrl+C or Cmd+C)</p>
-            <p><strong>Step 5:</strong> Paste below and click "Process Data"</p>
+        )}
+
+        {/* Instructions */}
+        <div className="bg-gray-50 rounded-lg p-3 mb-4">
+          <h3 className="font-medium text-gray-900 mb-2 flex items-center">
+            <div className="w-5 h-5 bg-blue-600 rounded-md flex items-center justify-center mr-2">
+              <span className="text-white text-xs">📋</span>
+            </div>
+            How to Import Data
+          </h3>
+          <div className="space-y-2">
+            {[
+              "Go to your DIU student portal",
+              `Find the ${tableType === 'payment' ? 'payment scheme' : 'course registration'} table`,
+              "Select the entire table (drag from top-left to bottom-right)",
+              "Copy the table (Ctrl+C or Cmd+C)",
+              "Paste below and click Import Data"
+            ].map((instruction, index) => (
+              <div key={index} className="flex items-center text-sm text-gray-700">
+                <div className="w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs font-medium mr-3 flex-shrink-0">
+                  {index + 1}
+                </div>
+                <span>{instruction}</span>
+              </div>
+            ))}
           </div>
         </div>
-        
-        <textarea
-          value={pasteText}
-          onChange={(e) => setPasteText(e.target.value)}
-          placeholder={tableType === 'payment' 
-            ? "Paste your payment scheme table here...\n\nExample:\nSL\tPayment name\tCourse Type\tCourse Category\tAmount\n1\tAdmission Fee\tOthers\tOthers\t15000\n2\tTuition Fee\tCourse Fee\tCore\t4900"
-            : "Paste your course registration table here...\n\nExample:\nSL\tCourse Code\tCourse Title\tCredit\tType\tSection\tTeacher\n1\tCSE110\tComputer Programming\t3\tREGULAR\t61_A\tTeacher Name\n2\tCSE111\tComputer Programming Lab\t1\tREGULAR\t61_A\tTeacher Name"
-          }
-          className="w-full h-40 p-4 border border-blue-300 rounded-lg font-mono text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          disabled={isProcessing}
-        />
-        
-        <div className="flex gap-3 mt-4">
-          <button
-            onClick={handlePortalPaste}
-            disabled={!pasteText.trim() || isProcessing}
-            className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
-          >
-            {isProcessing ? (
-              <>
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                Processing...
-              </>
-            ) : (
-              <>
-                <CheckCircle className="w-5 h-5 mr-2" />
-                Process Data
-              </>
-            )}
-          </button>
-          <button
-            onClick={() => setPasteText('')}
+
+        {/* Facebook-style Input Area */}
+        <div className="space-y-4">
+          <label className="block text-sm font-medium text-gray-700">
+            Paste your {tableType === 'payment' ? 'payment scheme' : 'course registration'} data here:
+          </label>
+          <textarea
+            value={pasteText}
+            onChange={(e) => setPasteText(e.target.value)}
+            placeholder={tableType === 'payment' 
+              ? "Example:\nSL\tPayment name\tCourse Type\tCourse Category\tAmount\n1\tAdmission Fee\tOthers\tOthers\t15000\n2\tTuition Fee\tCourse Fee\tCore\t4900"
+              : "Example:\nSL\tCourse Code\tCourse Title\tCredit\tType\tSection\tTeacher\n1\tCSE110\tComputer Programming\t3\tREGULAR\t61_A\tTeacher Name\n2\tCSE111\tComputer Programming Lab\t1\tREGULAR\t61_A\tTeacher Name"
+            }
+            className="w-full h-40 p-3 border border-gray-300 rounded-lg font-mono text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
             disabled={isProcessing}
-            className="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 disabled:opacity-50 transition-colors"
-          >
-            Clear
-          </button>
+          />
+          
+          <div className="flex gap-3">
+            <button
+              onClick={handlePortalPaste}
+              disabled={!pasteText.trim() || isProcessing}
+              className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white px-4 py-2 rounded-md font-medium disabled:cursor-not-allowed transition-colors flex items-center justify-center"
+            >
+              {isProcessing ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  Processing...
+                </>
+              ) : (
+                <>
+                  <CheckCircle className="w-4 h-4 mr-2" />
+                  Import Data
+                </>
+              )}
+            </button>
+            <button
+              onClick={() => setPasteText('')}
+              disabled={isProcessing}
+              className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md font-medium disabled:opacity-50 transition-colors"
+            >
+              Clear
+            </button>
+          </div>
         </div>
       </div>
     </div>
