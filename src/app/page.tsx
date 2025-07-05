@@ -6,6 +6,7 @@ import DirectEntry from '@/components/DirectEntry'
 import PaymentCalculator from '@/components/PaymentCalculator'
 import CourseEditor from '@/components/CourseEditor'
 import { CourseData, PaymentResult } from '@/types'
+import Image from 'next/image'
 
 export default function Home() {
   const [step, setStep] = useState(1)
@@ -76,8 +77,14 @@ export default function Home() {
         <div className="max-w-5xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <Calculator className="w-5 h-5 text-white" />
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden">
+                <Image 
+                  src="/KotoBaki.png" 
+                  alt="KotoBaki Logo" 
+                  width={32} 
+                  height={32}
+                  className="w-8 h-8 object-contain"
+                />
               </div>
               <div>
                 <h1 className="text-lg font-semibold text-gray-900">KotoBaki</h1>

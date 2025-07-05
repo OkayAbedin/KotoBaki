@@ -5,8 +5,15 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'DIU CSE Payment Calculator',
+  title: 'KotoBaki - DIU CSE Payment Calculator',
   description: 'Calculate payment fees for Daffodil International University CSE students',
+  icons: {
+    icon: [
+      { url: '/KotoBaki.png', type: 'image/png' },
+      { url: '/favicon.ico', type: 'image/x-icon' }
+    ],
+    apple: '/KotoBaki.png',
+  },
 }
 
 export default function RootLayout({
