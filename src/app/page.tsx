@@ -192,7 +192,6 @@ export default function Home() {
                   }))
                   
                   if (courseData.length === 0) {
-                    alert('No courses found. Please try again.')
                     return
                   }
                   
@@ -265,46 +264,21 @@ export default function Home() {
           {step === 4 && (
             <div className="space-y-4">
               <div className="bg-white rounded-lg border border-gray-200">
-                {/* Facebook-style header */}
-                <div className="px-6 py-4 border-b border-gray-200">
+                {/* Header */}
+                <div className="px-4 py-3 border-b border-gray-200">
                   <div className="flex items-center">
-                    <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center mr-3">
-                      <DollarSign className="w-5 h-5 text-white" />
+                    <div className="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center mr-3">
+                      <DollarSign className="w-4 h-4 text-white" />
                     </div>
                     <div>
-                      <h2 className="text-lg font-semibold text-gray-900">Payment Tracking</h2>
+                      <h2 className="text-base font-semibold text-gray-900">Payment Tracking</h2>
                       <p className="text-sm text-gray-500">Track any payments you&apos;ve already made (optional)</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="p-6">
-                  {/* Success state */}
-                  {amountAlreadyPaid > 0 && (
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
-                      <div className="flex items-start justify-between">
-                        <div className="flex items-start">
-                          <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
-                            <DollarSign className="w-4 h-4 text-green-600" />
-                          </div>
-                          <div>
-                            <h3 className="font-medium text-green-800">Payment Recorded</h3>
-                            <p className="text-sm text-green-700">
-                              Amount already paid: <span className="font-semibold">৳{amountAlreadyPaid.toLocaleString()}</span>
-                            </p>
-                          </div>
-                        </div>
-                        <button
-                          onClick={handlePaymentInfoComplete}
-                          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
-                        >
-                          Continue to Calculation
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                  
-                  <div className="max-w-md">
+                <div className="p-4">
+                  <div className="max-w-md mx-auto">
                     <div className="mb-4">
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Amount Already Paid (৳)
@@ -322,6 +296,23 @@ export default function Home() {
                         Leave as 0 if you haven&apos;t paid anything yet
                       </p>
                     </div>
+
+                    {/* Success state */}
+                    {amountAlreadyPaid > 0 && (
+                      <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
+                        <div className="flex items-center">
+                          <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                            <DollarSign className="w-3 h-3 text-green-600" />
+                          </div>
+                          <div>
+                            <h3 className="text-sm font-medium text-green-800">Payment Recorded</h3>
+                            <p className="text-sm text-green-700">
+                              Amount: <span className="font-semibold">৳{amountAlreadyPaid.toLocaleString()}</span>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                     
                     <div className="flex gap-3">
                       <button
@@ -345,7 +336,7 @@ export default function Home() {
                 </div>
               </div>
               
-              {/* Facebook-style navigation */}
+              {/* Navigation */}
               <div className="flex justify-between items-center bg-white p-4 rounded-lg border border-gray-200">
                 <button
                   onClick={() => navigateToStep(3)}

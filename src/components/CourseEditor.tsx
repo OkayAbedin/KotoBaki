@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Check, Eye, EyeOff } from 'lucide-react'
+import { Check } from 'lucide-react'
 import { CourseData } from '@/types'
 
 interface CourseEditorProps {
@@ -15,7 +15,6 @@ const waiverOptions = Array.from({ length: 21 }, (_, i) => i * 5)
 
 export default function CourseEditor({ initialCourses, availableCourseTypes, onCoursesUpdated }: CourseEditorProps) {
   const [courses, setCourses] = useState<CourseData[]>([])
-  const [showDetails, setShowDetails] = useState(false)
   const [defaultWaiver, setDefaultWaiver] = useState(0)
 
   useEffect(() => {
@@ -159,47 +158,33 @@ export default function CourseEditor({ initialCourses, availableCourseTypes, onC
     <div className="bg-white rounded-lg border border-gray-200">
       {/* Header */}
       <div className="px-4 py-3 border-b border-gray-200">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <div className="w-7 h-7 bg-green-600 rounded-lg flex items-center justify-center mr-3">
-              <Check className="w-4 h-4 text-white" />
-            </div>
-            <div>
-              <h2 className="text-base font-semibold text-gray-900">Review Your Courses</h2>
-              <p className="text-sm text-gray-500">Edit course details, credits, and set waiver percentages</p>
-            </div>
+        <div className="flex items-center">
+          <div className="w-7 h-7 bg-green-600 rounded-lg flex items-center justify-center mr-3">
+            <Check className="w-4 h-4 text-white" />
           </div>
-          <button
-            onClick={() => setShowDetails(!showDetails)}
-            className="flex items-center px-3 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded-md border border-gray-300 transition-colors"
-          >
-            {showDetails ? <EyeOff className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
-            {showDetails ? 'Hide Details' : 'Show Details'}
-          </button>
+          <div>
+            <h2 className="text-base font-semibold text-gray-900">Review Your Courses</h2>
+            <p className="text-sm text-gray-500">Edit course details, credits, and set waiver percentages</p>
+          </div>
         </div>
       </div>
 
       <div className="p-4">
         {/* Default Waiver Section */}
-        <div className="bg-blue-50 rounded-lg p-3 mb-4">
-          <h3 className="font-medium text-blue-900 mb-2 flex items-center">
-            <div className="w-5 h-5 bg-blue-600 rounded-md flex items-center justify-center mr-2">
-              <span className="text-white text-xs">🎯</span>
-            </div>
-            Set Default Waiver (Optional)
-          </h3>
-          <p className="text-blue-800 mb-3 text-sm">
+        <div className="bg-gray-50 rounded-lg p-3 mb-4">
+          <h3 className="text-sm font-medium text-gray-700 mb-3">Set Default Waiver (Optional)</h3>
+          <p className="text-gray-600 mb-3 text-sm">
             If you have a scholarship or waiver that applies to all courses, set it here and apply to all courses at once.
           </p>
-          <div className="flex items-center space-x-3">
+          <div className="flex items-end space-x-3">
             <div className="flex-1 max-w-xs">
-              <label className="block text-sm font-medium text-blue-800 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Default Waiver Percentage
               </label>
               <select
                 value={defaultWaiver}
                 onChange={(e) => setDefaultWaiver(parseInt(e.target.value))}
-                className="w-full px-3 py-2 bg-white border border-blue-200 text-gray-900 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                className="w-full px-3 py-2 bg-white border border-gray-300 text-gray-900 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
               >
                 {waiverOptions.map(percentage => (
                   <option key={percentage} value={percentage}>
@@ -211,7 +196,7 @@ export default function CourseEditor({ initialCourses, availableCourseTypes, onC
             <button
               onClick={applyDefaultWaiverToAll}
               disabled={defaultWaiver === 0}
-              className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white px-4 py-2 rounded-md font-medium disabled:cursor-not-allowed transition-colors"
+              className="bg-gray-600 hover:bg-gray-700 disabled:bg-gray-300 text-white px-4 py-2 rounded-md text-sm font-medium disabled:cursor-not-allowed transition-colors"
             >
               Apply to All
             </button>
@@ -258,12 +243,6 @@ export default function CourseEditor({ initialCourses, availableCourseTypes, onC
                     </div>
                   </div>
                 </div>
-                {showDetails && (
-                  <div className="mt-3 pt-3 border-t border-gray-100 text-xs text-gray-600">
-                    {course.section && <div>Section: {course.section}</div>}
-                    {course.teacher && <div>Teacher: {course.teacher}</div>}
-                  </div>
-                )}
               </div>
               
               <div className="flex items-center space-x-3 ml-4">
@@ -312,9 +291,6 @@ export default function CourseEditor({ initialCourses, availableCourseTypes, onC
                       </option>
                     ))}
                   </select>
-                  {course.waiverPercentage === defaultWaiver && defaultWaiver > 0 && (
-                    <div className="text-xs text-blue-600 mt-1">Default applied</div>
-                  )}
                 </div>
               </div>
             </div>

@@ -287,19 +287,6 @@ export default function PaymentCalculator({
             </div>
           </div>
 
-          {result.remainingAmount! > 0 && (
-            <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <h4 className="font-medium text-yellow-800 mb-2 flex items-center">
-                <span className="mr-2">💡</span>
-                Next Steps:
-              </h4>
-              <p className="text-sm text-yellow-700">
-                You still need to pay <strong>৳{result.remainingAmount!.toLocaleString()}</strong> to complete your registration. 
-                Contact the accounts office or make the payment through the student portal.
-              </p>
-            </div>
-          )}
-
           {result.overpaid! > 0 && (
             <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
               <h4 className="font-medium text-blue-800 mb-2 flex items-center">

@@ -24,7 +24,6 @@ export default function DirectEntry({ onDataExtracted, tableType, title, existin
   // Handle copy-paste from student portal
   const handlePortalPaste = async () => {
     if (!pasteText.trim()) {
-      alert('Please paste some data first.')
       return
     }
 
@@ -37,13 +36,9 @@ export default function DirectEntry({ onDataExtracted, tableType, title, existin
         if (!preserveTextOnSuccess) {
           setPasteText('')
         }
-        alert(`Successfully imported ${data.length} ${tableType === 'courses' ? 'courses' : 'payment items'}!`)
-      } else {
-        alert('No valid data found. Please check your pasted data format.')
       }
     } catch (error) {
       console.error('Parsing error:', error)
-      alert('Could not parse the data. Please check the format and try again.')
     } finally {
       setIsProcessing(false)
     }
