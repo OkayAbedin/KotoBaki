@@ -161,72 +161,72 @@ export default function PaymentCalculator({
         </div>
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
-          <div className="bg-blue-50 p-3 rounded-lg text-center border border-blue-200">
-            <div className="text-sm text-blue-600 mb-1">Registration Fee</div>
-            <div className="text-base font-semibold text-blue-800">৳{result.registrationFeeTotal.toLocaleString()}</div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 mb-4">
+          <div className="bg-blue-50 p-2 sm:p-3 rounded-lg text-center border border-blue-200">
+            <div className="text-xs sm:text-sm text-blue-600 mb-1">Registration Fee</div>
+            <div className="text-sm sm:text-base font-semibold text-blue-800">৳{result.registrationFeeTotal.toLocaleString()}</div>
           </div>
-          <div className="bg-green-50 p-3 rounded-lg text-center border border-green-200">
-            <div className="text-sm text-green-600 mb-1">Tuition (After Waiver)</div>
-            <div className="text-base font-semibold text-green-800">৳{result.tuitionFeeTotalAfterWaiver.toLocaleString()}</div>
+          <div className="bg-green-50 p-2 sm:p-3 rounded-lg text-center border border-green-200">
+            <div className="text-xs sm:text-sm text-green-600 mb-1">Tuition (After Waiver)</div>
+            <div className="text-sm sm:text-base font-semibold text-green-800">৳{result.tuitionFeeTotalAfterWaiver.toLocaleString()}</div>
           </div>
-          <div className="bg-purple-50 p-3 rounded-lg text-center border border-purple-200">
-            <div className="text-sm text-purple-600 mb-1">Total Waiver</div>
-            <div className="text-base font-semibold text-purple-800">৳{result.totalWaiverAmount.toLocaleString()}</div>
+          <div className="bg-purple-50 p-2 sm:p-3 rounded-lg text-center border border-purple-200">
+            <div className="text-xs sm:text-sm text-purple-600 mb-1">Total Waiver</div>
+            <div className="text-sm sm:text-base font-semibold text-purple-800">৳{result.totalWaiverAmount.toLocaleString()}</div>
           </div>
-          <div className="bg-gray-50 p-3 rounded-lg text-center border border-gray-200">
-            <div className="text-sm text-gray-600 mb-1">Total Due</div>
-            <div className="text-base font-semibold text-gray-800">৳{result.totalFeeWithWaiver.toLocaleString()}</div>
+          <div className="bg-gray-50 p-2 sm:p-3 rounded-lg text-center border border-gray-200">
+            <div className="text-xs sm:text-sm text-gray-600 mb-1">Total Due</div>
+            <div className="text-sm sm:text-base font-semibold text-gray-800">৳{result.totalFeeWithWaiver.toLocaleString()}</div>
           </div>
         </div>
       </div>
 
       {/* Detailed Breakdowns */}
-      <div className="grid md:grid-cols-2 gap-3">
+      <div className="space-y-3 lg:grid lg:grid-cols-2 lg:gap-3 lg:space-y-0">
         {/* Registration Fee Breakdown */}
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <h3 className="font-semibold mb-3 flex items-center text-gray-900">
-            <div className="w-5 h-5 bg-blue-600 rounded-md flex items-center justify-center mr-2">
-              <DollarSign className="w-3 h-3 text-white" />
+        <div className="bg-white rounded-lg border border-gray-200 p-3 sm:p-4">
+          <h3 className="font-semibold mb-3 flex items-center text-gray-900 text-sm sm:text-base">
+            <div className="w-4 h-4 sm:w-5 sm:h-5 bg-blue-600 rounded-md flex items-center justify-center mr-2">
+              <DollarSign className="w-2 h-2 sm:w-3 sm:h-3 text-white" />
             </div>
             Registration Fee Breakdown
           </h3>
-          <div className="space-y-3">
+          <div className="space-y-2 sm:space-y-3">
             {result.registrationFeeBreakdown.map((item, index) => (
               <div key={index} className="flex justify-between items-center p-2 bg-gray-50 rounded">
-                <span className="text-sm text-gray-700">{item.name}:</span>
-                <span className="font-medium text-gray-900">৳{item.amount.toLocaleString()}</span>
+                <span className="text-xs sm:text-sm text-gray-700 truncate mr-2">{item.name}:</span>
+                <span className="font-medium text-gray-900 text-xs sm:text-sm whitespace-nowrap">৳{item.amount.toLocaleString()}</span>
               </div>
             ))}
-            <hr className="my-3 border-gray-200" />
+            <hr className="my-2 sm:my-3 border-gray-200" />
             <div className="flex justify-between items-center p-2 bg-blue-50 rounded border border-blue-200">
-              <span className="font-medium text-blue-800">Total Registration Fee:</span>
-              <span className="font-semibold text-blue-800">৳{result.registrationFeeTotal.toLocaleString()}</span>
+              <span className="font-medium text-blue-800 text-xs sm:text-sm">Total Registration Fee:</span>
+              <span className="font-semibold text-blue-800 text-xs sm:text-sm whitespace-nowrap">৳{result.registrationFeeTotal.toLocaleString()}</span>
             </div>
           </div>
         </div>
 
         {/* Tuition Fee Breakdown */}
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <h3 className="font-semibold mb-3 flex items-center text-gray-900">
-            <div className="w-5 h-5 bg-green-600 rounded-md flex items-center justify-center mr-2">
-              <FileText className="w-3 h-3 text-white" />
+        <div className="bg-white rounded-lg border border-gray-200 p-3 sm:p-4">
+          <h3 className="font-semibold mb-3 flex items-center text-gray-900 text-sm sm:text-base">
+            <div className="w-4 h-4 sm:w-5 sm:h-5 bg-green-600 rounded-md flex items-center justify-center mr-2">
+              <FileText className="w-2 h-2 sm:w-3 sm:h-3 text-white" />
             </div>
             Tuition Fee Breakdown
           </h3>
-          <div className="space-y-3 max-h-80 overflow-y-auto">
+          <div className="space-y-2 sm:space-y-3 max-h-80 overflow-y-auto">
             {result.tuitionFeeBreakdown.map((course, index) => (
-              <div key={index} className="p-3 bg-gray-50 rounded border-l-4 border-green-400">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <div className="font-medium text-gray-900">{course.code}</div>
-                    <div className="text-sm text-gray-600">{course.title}</div>
+              <div key={index} className="p-2 sm:p-3 bg-gray-50 rounded border-l-4 border-green-400">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start space-y-1 sm:space-y-0">
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium text-gray-900 text-sm sm:text-base truncate">{course.code}</div>
+                    <div className="text-xs sm:text-sm text-gray-600 line-clamp-2">{course.title}</div>
                     <div className="text-xs text-gray-500">
                       {course.credits} credits × ৳{course.ratePerCredit.toLocaleString()} ({course.type})
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="font-medium text-gray-900">৳{course.feeAfterWaiver.toLocaleString()}</div>
+                  <div className="text-left sm:text-right sm:ml-2 flex-shrink-0">
+                    <div className="font-medium text-gray-900 text-sm sm:text-base">৳{course.feeAfterWaiver.toLocaleString()}</div>
                     {course.waiverPercentage > 0 && (
                       <div className="text-xs text-green-600">
                         {course.waiverPercentage}% waiver: -৳{course.waiverAmount.toLocaleString()}
@@ -236,9 +236,9 @@ export default function PaymentCalculator({
                 </div>
               </div>
             ))}
-            <div className="flex justify-between items-center p-2 bg-green-50 rounded border border-green-200 mt-3">
-              <span className="font-medium text-green-800">Total Tuition:</span>
-              <span className="font-semibold text-green-800">৳{result.tuitionFeeTotalAfterWaiver.toLocaleString()}</span>
+            <div className="flex justify-between items-center p-2 bg-green-50 rounded border border-green-200 mt-2 sm:mt-3">
+              <span className="font-medium text-green-800 text-xs sm:text-sm">Total Tuition:</span>
+              <span className="font-semibold text-green-800 text-xs sm:text-sm whitespace-nowrap">৳{result.tuitionFeeTotalAfterWaiver.toLocaleString()}</span>
             </div>
           </div>
         </div>
@@ -246,40 +246,40 @@ export default function PaymentCalculator({
 
       {/* Payment Status */}
       {amountAlreadyPaid > 0 && (
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <h3 className="font-semibold mb-3 flex items-center text-gray-900">
-            <div className="w-5 h-5 bg-purple-600 rounded-md flex items-center justify-center mr-2">
-              <CreditCard className="w-3 h-3 text-white" />
+        <div className="bg-white rounded-lg border border-gray-200 p-3 sm:p-4">
+          <h3 className="font-semibold mb-3 flex items-center text-gray-900 text-sm sm:text-base">
+            <div className="w-4 h-4 sm:w-5 sm:h-5 bg-purple-600 rounded-md flex items-center justify-center mr-2">
+              <CreditCard className="w-2 h-2 sm:w-3 sm:h-3 text-white" />
             </div>
             Your Payment Status
           </h3>
           
-          <div className="grid md:grid-cols-3 gap-3 mb-3">
-            <div className="p-3 bg-gray-50 rounded-lg text-center border border-gray-200">
-              <div className="text-sm text-gray-600 mb-1">Total Amount Due</div>
-              <div className="text-base font-semibold text-gray-800">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 mb-3">
+            <div className="p-2 sm:p-3 bg-gray-50 rounded-lg text-center border border-gray-200">
+              <div className="text-xs sm:text-sm text-gray-600 mb-1">Total Amount Due</div>
+              <div className="text-sm sm:text-base font-semibold text-gray-800">
                 ৳{result.totalFeeWithWaiver.toLocaleString()}
               </div>
             </div>
             
-            <div className="p-3 bg-green-50 rounded-lg text-center border border-green-200">
-              <div className="text-sm text-green-600 mb-1">Amount Already Paid</div>
-              <div className="text-base font-semibold text-green-700">
+            <div className="p-2 sm:p-3 bg-green-50 rounded-lg text-center border border-green-200">
+              <div className="text-xs sm:text-sm text-green-600 mb-1">Amount Already Paid</div>
+              <div className="text-sm sm:text-base font-semibold text-green-700">
                 ৳{amountAlreadyPaid.toLocaleString()}
               </div>
             </div>
             
-            <div className={`p-3 rounded-lg text-center border ${
+            <div className={`p-2 sm:p-3 rounded-lg text-center border ${
               result.remainingAmount! > 0 
                 ? 'bg-red-50 border-red-200' 
                 : result.overpaid! > 0 
                 ? 'bg-blue-50 border-blue-200' 
                 : 'bg-green-50 border-green-200'
             }`}>
-              <div className="text-sm text-gray-600 mb-1">
+              <div className="text-xs sm:text-sm text-gray-600 mb-1">
                 {result.remainingAmount! > 0 ? 'Still Owed' : result.overpaid! > 0 ? 'Overpaid' : 'Fully Paid'}
               </div>
-              <div className={`text-base font-semibold ${
+              <div className={`text-sm sm:text-base font-semibold ${
                 result.remainingAmount! > 0 ? 'text-red-700' : result.overpaid! > 0 ? 'text-blue-700' : 'text-green-700'
               }`}>
                 ৳{(result.remainingAmount! || result.overpaid! || 0).toLocaleString()}
@@ -288,12 +288,12 @@ export default function PaymentCalculator({
           </div>
 
           {result.overpaid! > 0 && (
-            <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <h4 className="font-medium text-blue-800 mb-2 flex items-center">
+            <div className="p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <h4 className="font-medium text-blue-800 mb-2 flex items-center text-sm sm:text-base">
                 <span className="mr-2">ℹ️</span>
                 Overpayment Notice:
               </h4>
-              <p className="text-sm text-blue-700">
+              <p className="text-xs sm:text-sm text-blue-700">
                 You have paid <strong>৳{result.overpaid!.toLocaleString()}</strong> more than required. 
                 This amount will be adjusted in your next semester or you can request a refund from the accounts office.
               </p>
@@ -301,12 +301,12 @@ export default function PaymentCalculator({
           )}
 
           {result.remainingAmount === 0 && result.overpaid === 0 && (
-            <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-              <h4 className="font-medium text-green-800 mb-2 flex items-center">
+            <div className="p-3 sm:p-4 bg-green-50 border border-green-200 rounded-lg">
+              <h4 className="font-medium text-green-800 mb-2 flex items-center text-sm sm:text-base">
                 <span className="mr-2">✅</span>
                 Payment Complete:
               </h4>
-              <p className="text-sm text-green-700">
+              <p className="text-xs sm:text-sm text-green-700">
                 Congratulations! You have paid the exact amount required for this semester.
               </p>
             </div>
@@ -315,17 +315,17 @@ export default function PaymentCalculator({
       )}
 
       {/* Facebook-style Action Buttons */}
-      <div className="flex justify-center space-x-4">
+      <div className="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-4">
         <button
           onClick={() => window.print()}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md font-medium transition-colors flex items-center"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-6 py-2 rounded-md font-medium transition-colors flex items-center justify-center text-sm sm:text-base"
         >
-          <FileText className="w-4 h-4 mr-2" />
+          <FileText className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
           Print Summary
         </button>
         <button
           onClick={() => window.location.reload()}
-          className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-md font-medium transition-colors"
+          className="bg-gray-500 hover:bg-gray-600 text-white px-4 sm:px-6 py-2 rounded-md font-medium transition-colors text-sm sm:text-base"
         >
           Start Over
         </button>
