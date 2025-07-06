@@ -87,7 +87,7 @@ export default function DirectEntry({ onDataExtracted, tableType, title, existin
           <div className="space-y-4">
             {[
               "Go to your DIU student portal",
-              `Find the ${tableType === 'payment' ? 'payment scheme' : 'course registration'} table`,
+              `Find the ${tableType === 'payment' ? 'payment scheme' : 'course registration'} table from the Student Profile Section`,
               "Select the entire table (drag from top-left to bottom-right)",
               "Copy the table (Ctrl+C or Cmd+C)",
               "Paste below and click Import Data"

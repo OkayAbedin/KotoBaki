@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Upload, Calculator, FileText, Edit3, DollarSign, Check } from 'lucide-react'
+import { Upload, Calculator, FileText, Edit3, DollarSign, Check, Github } from 'lucide-react'
 import DirectEntry from '@/components/DirectEntry'
 import PaymentCalculator from '@/components/PaymentCalculator'
 import CourseEditor from '@/components/CourseEditor'
@@ -87,9 +87,21 @@ export default function Home() {
                 />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">KotoBaki?</h1>
+                <h1 className="text-xl font-bold text-gray-900">KotoBaki</h1>
                 <p className="text-sm text-gray-600">Calculate your semester fees with ease</p>
               </div>
+            </div>
+            {/* Fork on GitHub Button */}
+            <div className="flex items-center">
+              <a
+                href="https://github.com/OkayAbedin/KotoBaki"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white hover:bg-gray-50 text-gray-800 border border-gray-300 hover:border-gray-400 px-4 py-2 rounded-2xl font-semibold text-sm transition-all duration-300 transform hover:scale-105 shadow-lg shadow-gray-200/50 flex items-center space-x-2"
+              >
+                <Github className="w-4 h-4" />
+                <span>Fork on GitHub</span>
+              </a>
             </div>
           </div>
         </div>
@@ -99,7 +111,8 @@ export default function Home() {
       <div className="bg-white/70 backdrop-blur-md border-b border-gray-200/50 shadow-md shadow-gray-200/30">
         <div className="max-w-6xl mx-auto px-6 py-6">
           <div className="flex justify-center">
-            <div className="flex items-center space-x-8">
+            {/* Desktop: Single line layout */}
+            <div className="hidden md:flex items-center space-x-8">
               {[
                 { number: 1, icon: Upload, title: "Payment Scheme", desc: "Import payment data" },
                 { number: 2, icon: FileText, title: "Course Data", desc: "Import courses" },
@@ -146,6 +159,104 @@ export default function Home() {
                   )}
                 </div>
               ))}
+            </div>
+
+            {/* Mobile: Two-line layout */}
+            <div className="md:hidden w-full">
+              {/* First row: Steps 1-3 */}
+              <div className="flex justify-center items-center space-x-4 mb-6">
+                {[
+                  { number: 1, icon: Upload, title: "Payment", desc: "Import data" },
+                  { number: 2, icon: FileText, title: "Courses", desc: "Import courses" },
+                  { number: 3, icon: Edit3, title: "Review", desc: "Edit details" }
+                ].map((stepInfo, index) => (
+                  <div key={stepInfo.number} className="flex items-center">
+                    <div className="flex flex-col items-center">
+                      <button
+                        onClick={() => navigateToStep(stepInfo.number)}
+                        disabled={!canNavigateToStep(stepInfo.number)}
+                        className={`relative w-10 h-10 rounded-2xl flex items-center justify-center text-xs font-bold transition-all duration-300 transform hover:scale-105 shadow-md ${
+                          step === stepInfo.number
+                            ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-blue-500/30'
+                            : completedSteps.includes(stepInfo.number)
+                            ? 'bg-gradient-to-br from-green-500 to-green-600 text-white shadow-green-500/30'
+                            : canNavigateToStep(stepInfo.number)
+                            ? 'bg-gradient-to-br from-gray-100 to-gray-200 text-gray-700 hover:from-gray-200 hover:to-gray-300 shadow-gray-300/40'
+                            : 'bg-gray-100 text-gray-400 cursor-not-allowed shadow-gray-200/30'
+                        }`}
+                      >
+                        {completedSteps.includes(stepInfo.number) ? (
+                          <Check size={16} />
+                        ) : (
+                          stepInfo.number
+                        )}
+                      </button>
+                      <div className="mt-2 text-center">
+                        <div className="text-xs font-semibold text-gray-800">{stepInfo.title}</div>
+                        <div className="text-xs text-gray-600">{stepInfo.desc}</div>
+                      </div>
+                    </div>
+                    {index < 2 && (
+                      <div
+                        className={`w-8 h-1 mx-2 rounded-full transition-all duration-300 ${
+                          completedSteps.includes(stepInfo.number) 
+                            ? 'bg-gradient-to-r from-green-400 to-green-500 shadow-sm shadow-green-500/30' 
+                            : step > stepInfo.number 
+                            ? 'bg-gradient-to-r from-blue-400 to-blue-500 shadow-sm shadow-blue-500/30' 
+                            : 'bg-gray-200'
+                        }`}
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Second row: Steps 4-5 */}
+              <div className="flex justify-center items-center space-x-4">
+                {[
+                  { number: 4, icon: DollarSign, title: "Payment", desc: "Track payments" },
+                  { number: 5, icon: Calculator, title: "Calculate", desc: "Get results" }
+                ].map((stepInfo, index) => (
+                  <div key={stepInfo.number} className="flex items-center">
+                    <div className="flex flex-col items-center">
+                      <button
+                        onClick={() => navigateToStep(stepInfo.number)}
+                        disabled={!canNavigateToStep(stepInfo.number)}
+                        className={`relative w-10 h-10 rounded-2xl flex items-center justify-center text-xs font-bold transition-all duration-300 transform hover:scale-105 shadow-md ${
+                          step === stepInfo.number
+                            ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-blue-500/30'
+                            : completedSteps.includes(stepInfo.number)
+                            ? 'bg-gradient-to-br from-green-500 to-green-600 text-white shadow-green-500/30'
+                            : canNavigateToStep(stepInfo.number)
+                            ? 'bg-gradient-to-br from-gray-100 to-gray-200 text-gray-700 hover:from-gray-200 hover:to-gray-300 shadow-gray-300/40'
+                            : 'bg-gray-100 text-gray-400 cursor-not-allowed shadow-gray-200/30'
+                        }`}
+                      >
+                        {completedSteps.includes(stepInfo.number) ? (
+                          <Check size={16} />
+                        ) : (
+                          stepInfo.number
+                        )}
+                      </button>
+                      <div className="mt-2 text-center">
+                        <div className="text-xs font-semibold text-gray-800">{stepInfo.title}</div>
+                        <div className="text-xs text-gray-600">{stepInfo.desc}</div>
+                      </div>
+                    </div>
+                    {index < 1 && (
+                      <div
+                        className={`w-8 h-1 mx-2 rounded-full transition-all duration-300 ${
+                          completedSteps.includes(stepInfo.number) 
+                            ? 'bg-gradient-to-r from-green-400 to-green-500 shadow-sm shadow-green-500/30' 
+                            : step > stepInfo.number 
+                            ? 'bg-gradient-to-r from-blue-400 to-blue-500 shadow-sm shadow-blue-500/30' 
+                            : 'bg-gray-200'
+                        }`}
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -335,6 +446,20 @@ export default function Home() {
           )}
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="bg-white/80 backdrop-blur-md border-t border-gray-200/50 shadow-lg shadow-gray-200/50 mt-16">
+        <div className="max-w-6xl mx-auto px-6 py-6">
+          <div className="flex items-center justify-center">
+            <p className="text-sm text-gray-600 flex items-center space-x-1">
+              <span>Made with</span>
+              <span className="text-red-500 text-lg animate-pulse">❤️</span>
+              <span>by</span>
+              <span className="font-semibold text-gray-900">Minhaz</span>
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
