@@ -5,8 +5,8 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'KotoBaki - DIU CSE Payment Calculator',
-  description: 'Calculate payment fees for Daffodil International University CSE students',
+  title: 'KotoBaki - DIU Payment Calculator',
+  description: 'Calculate payment fees for Daffodil International University',
   icons: {
     icon: [
       { url: '/KotoBaki.png', type: 'image/png' },

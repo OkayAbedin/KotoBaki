@@ -71,24 +71,24 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
-        <div className="max-w-5xl mx-auto px-4 py-3">
+      <div className="bg-white/80 backdrop-blur-md shadow-lg shadow-gray-200/50 border-b border-gray-200/50 sticky top-0 z-50">
+        <div className="max-w-6xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden">
+            <div className="flex items-center space-x-4">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center overflow-hidden shadow-lg shadow-blue-500/25">
                 <Image 
                   src="/KotoBaki.png" 
                   alt="KotoBaki Logo" 
-                  width={32} 
-                  height={32}
+                  width={40} 
+                  height={40}
                   className="w-8 h-8 object-contain"
                 />
               </div>
               <div>
-                <h1 className="text-lg font-semibold text-gray-900">KotoBaki</h1>
-                <p className="text-sm text-gray-500">Calculate your semester fees</p>
+                <h1 className="text-xl font-bold text-gray-900">KotoBaki?</h1>
+                <p className="text-sm text-gray-600">Calculate your semester fees with ease</p>
               </div>
             </div>
           </div>
@@ -96,10 +96,10 @@ export default function Home() {
       </div>
 
       {/* Progress Navigation */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-5xl mx-auto px-4 py-3">
+      <div className="bg-white/70 backdrop-blur-md border-b border-gray-200/50 shadow-md shadow-gray-200/30">
+        <div className="max-w-6xl mx-auto px-6 py-6">
           <div className="flex justify-center">
-            <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-8">
               {[
                 { number: 1, icon: Upload, title: "Payment Scheme", desc: "Import payment data" },
                 { number: 2, icon: FileText, title: "Course Data", desc: "Import courses" },
@@ -112,34 +112,34 @@ export default function Home() {
                     <button
                       onClick={() => navigateToStep(stepInfo.number)}
                       disabled={!canNavigateToStep(stepInfo.number)}
-                      className={`relative w-7 h-7 rounded-full flex items-center justify-center text-sm font-medium transition-all duration-200 ${
+                      className={`relative w-12 h-12 rounded-2xl flex items-center justify-center text-sm font-bold transition-all duration-300 transform hover:scale-105 shadow-lg ${
                         step === stepInfo.number
-                          ? 'bg-blue-600 text-white'
+                          ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-blue-500/30'
                           : completedSteps.includes(stepInfo.number)
-                          ? 'bg-green-500 text-white'
+                          ? 'bg-gradient-to-br from-green-500 to-green-600 text-white shadow-green-500/30'
                           : canNavigateToStep(stepInfo.number)
-                          ? 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                          : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                          ? 'bg-gradient-to-br from-gray-100 to-gray-200 text-gray-700 hover:from-gray-200 hover:to-gray-300 shadow-gray-300/40'
+                          : 'bg-gray-100 text-gray-400 cursor-not-allowed shadow-gray-200/30'
                       }`}
                     >
                       {completedSteps.includes(stepInfo.number) ? (
-                        <Check size={14} />
+                        <Check size={20} />
                       ) : (
                         stepInfo.number
                       )}
                     </button>
-                    <div className="mt-2 text-center">
-                      <div className="text-xs font-medium text-gray-700">{stepInfo.title}</div>
-                      <div className="text-xs text-gray-500">{stepInfo.desc}</div>
+                    <div className="mt-3 text-center">
+                      <div className="text-sm font-semibold text-gray-800">{stepInfo.title}</div>
+                      <div className="text-xs text-gray-600">{stepInfo.desc}</div>
                     </div>
                   </div>
                   {stepInfo.number < 5 && (
                     <div
-                      className={`w-8 h-px mx-3 transition-colors ${
+                      className={`w-12 h-1 mx-4 rounded-full transition-all duration-300 ${
                         completedSteps.includes(stepInfo.number) 
-                          ? 'bg-green-500' 
+                          ? 'bg-gradient-to-r from-green-400 to-green-500 shadow-md shadow-green-500/30' 
                           : step > stepInfo.number 
-                          ? 'bg-blue-600' 
+                          ? 'bg-gradient-to-r from-blue-400 to-blue-500 shadow-md shadow-blue-500/30' 
                           : 'bg-gray-200'
                       }`}
                     />
@@ -152,29 +152,31 @@ export default function Home() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-5xl mx-auto px-4 py-4">
-        <div className="max-w-3xl mx-auto">
+      <div className="max-w-6xl mx-auto px-6 py-8">
+        <div className="max-w-4xl mx-auto">
           {step === 1 && (
-            <div className="space-y-4">
-              <DirectEntry
-                onDataExtracted={(data: any[]) => {
-                  console.log('Payment scheme data extracted:', data)
-                  handlePaymentSchemeExtracted(data)
-                }}
-                title="Step 1: Import Payment Scheme"
-                tableType="payment"
-                existingData={paymentSchemeData}
-                preserveTextOnSuccess={true}
-              />
-              {/* Facebook-style continue button */}
+            <div className="space-y-6">
+              <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl shadow-gray-200/50 border border-gray-200/50 p-8">
+                <DirectEntry
+                  onDataExtracted={(data: any[]) => {
+                    console.log('Payment scheme data extracted:', data)
+                    handlePaymentSchemeExtracted(data)
+                  }}
+                  title="Step 1: Import Payment Scheme"
+                  tableType="payment"
+                  existingData={paymentSchemeData}
+                  preserveTextOnSuccess={true}
+                />
+              </div>
+              {/* Modern continue button */}
               {paymentSchemeData.length > 0 && (
                 <div className="text-center">
                   <button
                     onClick={() => handlePaymentSchemeExtracted(paymentSchemeData)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md font-medium transition-colors inline-flex items-center"
+                    className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl shadow-blue-500/30 inline-flex items-center"
                   >
                     Continue to Course Registration
-                    <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                   </button>
@@ -184,85 +186,86 @@ export default function Home() {
           )}
 
           {step === 2 && (
-            <div className="space-y-4">
-              <DirectEntry
-                onDataExtracted={(courses: any[]) => {
-                  console.log('Course data extracted:', courses)
-                  
-                  // Convert to CourseData format
-                  const courseData: CourseData[] = courses.map((course: any) => ({
-                    code: course.code,
-                    title: course.title,
-                    credits: course.credits,
-                    type: course.type as CourseData['type'],
-                    waiverPercentage: course.waiverPercentage || 0
-                  }))
-                  
-                  if (courseData.length === 0) {
-                    return
-                  }
-                  
-                  handleCoursesExtracted(courseData)
-                }}
-                title="Step 2: Import Course Registration"
-                tableType="courses"
-                existingData={courseData.length > 0 ? courseData : undefined}
-                preserveTextOnSuccess={true}
-              />
+            <div className="space-y-6">
+              <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl shadow-gray-200/50 border border-gray-200/50 p-8">
+                <DirectEntry
+                  onDataExtracted={(courses: any[]) => {
+                    console.log('Course data extracted:', courses)
+                    
+                    // Convert to CourseData format
+                    const courseData: CourseData[] = courses.map((course: any) => ({
+                      code: course.code,
+                      title: course.title,
+                      credits: course.credits,
+                      type: course.type as CourseData['type'],
+                      waiverPercentage: course.waiverPercentage || 0
+                    }))
+                    
+                    if (courseData.length === 0) {
+                      return
+                    }
+                    
+                    handleCoursesExtracted(courseData)
+                  }}
+                  title="Step 2: Import Course Registration"
+                  tableType="courses"
+                  existingData={courseData.length > 0 ? courseData : undefined}
+                  preserveTextOnSuccess={true}
+                />
+              </div>
               
-              {/* Facebook-style continue button */}
+              {/* Modern continue button */}
               {courseData.length > 0 && (
                 <div className="text-center">
                   <button
                     onClick={() => handleCoursesExtracted(courseData)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md font-medium transition-colors inline-flex items-center"
+                    className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl shadow-blue-500/30 inline-flex items-center"
                   >
                     Continue to Review Courses
-                    <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                   </button>
                 </div>
               )}
-              
-
             </div>
           )}
 
           {step === 3 && (
-            <div className="space-y-4">
-              <CourseEditor
-                initialCourses={courseData}
-                availableCourseTypes={Array.from(new Set(paymentSchemeData
-                  .filter(item => item.paymentName === 'Tuition Fee')
-                  .map(item => item.courseCategory)
-                ))}
-                onCoursesUpdated={handleCoursesUpdated}
-              />
-
+            <div className="space-y-6">
+              <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl shadow-gray-200/50 border border-gray-200/50 p-8">
+                <CourseEditor
+                  initialCourses={courseData}
+                  availableCourseTypes={Array.from(new Set(paymentSchemeData
+                    .filter(item => item.paymentName === 'Tuition Fee')
+                    .map(item => item.courseCategory)
+                  ))}
+                  onCoursesUpdated={handleCoursesUpdated}
+                />
+              </div>
             </div>
           )}
 
           {step === 4 && (
-            <div className="space-y-4">
-              <div className="bg-white rounded-lg border border-gray-200">
+            <div className="space-y-6">
+              <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl shadow-gray-200/50 border border-gray-200/50 overflow-hidden">
                 {/* Header */}
-                <div className="px-4 py-3 border-b border-gray-200">
+                <div className="px-8 py-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-200/50">
                   <div className="flex items-center">
-                    <div className="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center mr-3">
-                      <DollarSign className="w-4 h-4 text-white" />
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mr-4 shadow-lg shadow-blue-500/30">
+                      <DollarSign className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h2 className="text-base font-semibold text-gray-900">Payment Tracking</h2>
-                      <p className="text-sm text-gray-500">Track any payments you&apos;ve already made (optional)</p>
+                      <h2 className="text-xl font-bold text-gray-900">Payment Tracking</h2>
+                      <p className="text-sm text-gray-600">Track any payments you&apos;ve already made (optional)</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="p-4">
+                <div className="p-8">
                   <div className="max-w-md mx-auto">
-                    <div className="mb-4">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <div className="mb-6">
+                      <label className="block text-sm font-semibold text-gray-700 mb-3">
                         Amount Already Paid (৳)
                       </label>
                       <input
@@ -270,38 +273,38 @@ export default function Home() {
                         min="0"
                         step="100"
                         placeholder="0"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 text-lg font-medium"
                         onChange={(e) => setAmountAlreadyPaid(parseInt(e.target.value) || 0)}
                         value={amountAlreadyPaid > 0 ? amountAlreadyPaid : ''}
                       />
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-gray-500 mt-2">
                         Leave as 0 if you haven&apos;t paid anything yet
                       </p>
                     </div>
 
                     {/* Success state */}
                     {amountAlreadyPaid > 0 && (
-                      <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
+                      <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-4 mb-6 shadow-lg shadow-green-100/50">
                         <div className="flex items-center">
-                          <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-3">
-                            <DollarSign className="w-3 h-3 text-green-600" />
+                          <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mr-4 shadow-lg shadow-green-500/30">
+                            <DollarSign className="w-5 h-5 text-white" />
                           </div>
                           <div>
-                            <h3 className="text-sm font-medium text-green-800">Payment Recorded</h3>
+                            <h3 className="text-sm font-semibold text-green-800">Payment Recorded</h3>
                             <p className="text-sm text-green-700">
-                              Amount: <span className="font-semibold">৳{amountAlreadyPaid.toLocaleString()}</span>
+                              Amount: <span className="font-bold">৳{amountAlreadyPaid.toLocaleString()}</span>
                             </p>
                           </div>
                         </div>
                       </div>
                     )}
                     
-                    <div className="flex gap-3">
+                    <div className="flex gap-4">
                       <button
                         onClick={handlePaymentInfoComplete}
-                        className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium transition-colors flex items-center justify-center"
+                        className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-4 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-xl shadow-blue-500/30 flex items-center justify-center"
                       >
-                        <Calculator className="w-4 h-4 mr-2" />
+                        <Calculator className="w-5 h-5 mr-2" />
                         Calculate Payment
                       </button>
                       <button
@@ -309,7 +312,7 @@ export default function Home() {
                           setAmountAlreadyPaid(0)
                           handlePaymentInfoComplete()
                         }}
-                        className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md font-medium transition-colors"
+                        className="bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white px-6 py-4 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg shadow-gray-500/30"
                       >
                         Skip
                       </button>
@@ -317,19 +320,17 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-
             </div>
           )}
 
           {step === 5 && (
-            <div className="space-y-4">
+            <div className="space-y-6">
               <PaymentCalculator
                 courseData={courseData}
                 paymentSchemeData={paymentSchemeData}
                 amountAlreadyPaid={amountAlreadyPaid}
                 onCalculationComplete={handleCalculationComplete}
               />
-
             </div>
           )}
         </div>

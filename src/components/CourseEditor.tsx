@@ -155,89 +155,98 @@ export default function CourseEditor({ initialCourses, availableCourseTypes, onC
   }
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200">
+    <div>
       {/* Header */}
-      <div className="px-4 py-3 border-b border-gray-200">
+      <div className="mb-8">
         <div className="flex items-center">
-          <div className="w-7 h-7 bg-green-600 rounded-lg flex items-center justify-center mr-3">
-            <Check className="w-4 h-4 text-white" />
+          <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-3xl flex items-center justify-center mr-4 shadow-xl shadow-green-500/30">
+            <Check className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h2 className="text-base font-semibold text-gray-900">Review Your Courses</h2>
-            <p className="text-sm text-gray-500">Edit course details, credits, and set waiver percentages</p>
+            <h2 className="text-2xl font-bold text-gray-900">Review Your Courses</h2>
+            <p className="text-sm text-gray-600">Edit course details, credits, and set waiver percentages</p>
           </div>
         </div>
       </div>
 
-      <div className="p-4">
-        {/* Default Waiver Section */}
-        <div className="bg-gray-50 rounded-lg p-3 mb-4">
-          <h3 className="text-sm font-medium text-gray-700 mb-3">Set Default Waiver (Optional)</h3>
-          <p className="text-gray-600 mb-3 text-sm">
-            If you have a scholarship or waiver that applies to all courses, set it here and apply to all courses at once.
-          </p>
-          <div className="flex items-end space-x-3">
-            <div className="flex-1 max-w-xs">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Default Waiver Percentage
-              </label>
-              <select
-                value={defaultWaiver}
-                onChange={(e) => setDefaultWaiver(parseInt(e.target.value))}
-                className="w-full px-3 py-2 bg-white border border-gray-300 text-gray-900 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-              >
-                {waiverOptions.map(percentage => (
-                  <option key={percentage} value={percentage}>
-                    {percentage}%
-                  </option>
-                ))}
-              </select>
-            </div>
-            <button
-              onClick={applyDefaultWaiverToAll}
-              disabled={defaultWaiver === 0}
-              className="bg-gray-600 hover:bg-gray-700 disabled:bg-gray-300 text-white px-4 py-2 rounded-md text-sm font-medium disabled:cursor-not-allowed transition-colors"
-            >
-              Apply to All
-            </button>
+      {/* Default Waiver Section */}
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3xl border border-blue-200 shadow-xl shadow-blue-200/50 p-6 mb-8">
+        <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
+          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mr-3 shadow-lg shadow-blue-500/30">
+            <span className="text-white font-bold text-sm">%</span>
           </div>
+          Set Default Waiver (Optional)
+        </h3>
+        <p className="text-gray-700 mb-6 text-sm leading-relaxed">
+          If you have a scholarship or waiver that applies to all courses, set it here and apply to all courses at once.
+        </p>
+        <div className="flex items-end space-x-4">
+          <div className="flex-1 max-w-xs">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Default Waiver Percentage
+            </label>
+            <select
+              value={defaultWaiver}
+              onChange={(e) => setDefaultWaiver(parseInt(e.target.value))}
+              className="w-full px-4 py-3 bg-white border border-gray-300 text-gray-900 rounded-2xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 font-medium shadow-md shadow-gray-200/50"
+            >
+              {waiverOptions.map(percentage => (
+                <option key={percentage} value={percentage}>
+                  {percentage}%
+                </option>
+              ))}
+            </select>
+          </div>
+          <button
+            onClick={applyDefaultWaiverToAll}
+            disabled={defaultWaiver === 0}
+            className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-gray-300 disabled:to-gray-400 text-white px-6 py-3 rounded-2xl text-sm font-semibold disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-105 shadow-lg shadow-blue-500/30 disabled:shadow-gray-300/30"
+          >
+            Apply to All
+          </button>
         </div>
+      </div>
 
       {/* Course Summary */}
-      <div className="bg-gray-50 rounded-lg p-3 mb-4">
-        <h3 className="font-medium mb-3 text-gray-900">Summary</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="text-center">
-            <div className="text-xl font-semibold text-gray-900">{courses.length}</div>
-            <div className="text-xs text-gray-500">Total Courses</div>
+      <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-3xl border border-gray-200 shadow-xl shadow-gray-200/50 p-6 mb-8">
+        <h3 className="font-bold mb-6 text-gray-900 text-lg flex items-center">
+          <div className="w-8 h-8 bg-gradient-to-br from-gray-500 to-gray-600 rounded-2xl flex items-center justify-center mr-3 shadow-lg shadow-gray-500/30">
+            <span className="text-white font-bold text-sm">#</span>
           </div>
-          <div className="text-center">
-            <div className="text-xl font-semibold text-gray-900">{courses.reduce((sum, course) => sum + course.credits, 0)}</div>
-            <div className="text-xs text-gray-500">Total Credits</div>
+          Summary
+        </h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="text-center bg-white rounded-2xl p-4 shadow-lg shadow-gray-200/50">
+            <div className="text-2xl font-bold text-gray-900">{courses.length}</div>
+            <div className="text-sm text-gray-600 font-medium">Total Courses</div>
           </div>
-          <div className="text-center">
-            <div className="text-xl font-semibold text-green-600">{courses.filter(course => course.waiverPercentage > 0).length}</div>
-            <div className="text-xs text-gray-500">With Waiver</div>
+          <div className="text-center bg-white rounded-2xl p-4 shadow-lg shadow-gray-200/50">
+            <div className="text-2xl font-bold text-gray-900">{courses.reduce((sum, course) => sum + course.credits, 0)}</div>
+            <div className="text-sm text-gray-600 font-medium">Total Credits</div>
           </div>
-          <div className="text-center">
-            <div className="text-xl font-semibold text-blue-600">{defaultWaiver}%</div>
-            <div className="text-xs text-gray-500">Default Waiver</div>
+          <div className="text-center bg-white rounded-2xl p-4 shadow-lg shadow-gray-200/50">
+            <div className="text-2xl font-bold text-green-600">{courses.filter(course => course.waiverPercentage > 0).length}</div>
+            <div className="text-sm text-gray-600 font-medium">With Waiver</div>
+          </div>
+          <div className="text-center bg-white rounded-2xl p-4 shadow-lg shadow-gray-200/50">
+            <div className="text-2xl font-bold text-blue-600">{defaultWaiver}%</div>
+            <div className="text-sm text-gray-600 font-medium">Default Waiver</div>
           </div>
         </div>
       </div>
 
       {/* Courses List */}
-      <div className="space-y-3 mb-4">
+      <div className="space-y-4 mb-8">
         {courses.map((course, index) => (
-          <div key={index} className="border border-gray-200 rounded-lg p-3 hover:border-gray-300 transition-colors">
+          <div key={index} className="bg-white rounded-2xl border border-gray-200 shadow-lg shadow-gray-200/50 p-6 hover:shadow-xl hover:shadow-gray-300/60 transition-all duration-300 transform hover:scale-[1.02]">
             <div className="flex items-center justify-between">
               <div className="flex-1">
-                <div className="flex items-start space-x-4">
+                <div className="flex items-start space-x-6">
                   <div className="flex-1">
-                    <div className="font-semibold text-gray-900">{course.code}</div>
-                    <div className="text-gray-700 text-sm mt-1">{course.title}</div>
-                    <div className="flex items-center space-x-2 mt-2">
-                      <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs font-medium">
+                    <div className="font-bold text-gray-900 text-lg">{course.code}</div>
+                    <div className="text-gray-700 text-sm mt-2 leading-relaxed">{course.title}</div>
+                    <div className="flex items-center space-x-3 mt-4">
+                      <span className="px-4 py-2 bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 rounded-2xl text-sm font-semibold shadow-md shadow-blue-200/50">
                         {course.type}
                       </span>
                     </div>
@@ -245,27 +254,27 @@ export default function CourseEditor({ initialCourses, availableCourseTypes, onC
                 </div>
               </div>
               
-              <div className="flex items-center space-x-3 ml-4">
+              <div className="flex items-center space-x-4 ml-6">
                 {/* Credits Input */}
-                <div className="min-w-[70px]">
-                  <label className="block text-xs text-gray-600 mb-1">Credits</label>
+                <div className="min-w-[80px]">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Credits</label>
                   <input
                     type="number"
                     min="1"
                     max="6"
                     value={course.credits}
                     onChange={(e) => updateCourseCredits(index, parseInt(e.target.value) || 1)}
-                    className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent text-center"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-2xl text-sm focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 text-center font-semibold transition-all duration-300 shadow-md shadow-gray-200/50"
                   />
                 </div>
 
                 {/* Course Type Dropdown */}
-                <div className="min-w-[120px]">
-                  <label className="block text-xs text-gray-600 mb-1">Course Type</label>
+                <div className="min-w-[140px]">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Course Type</label>
                   <select
                     value={course.type}
                     onChange={(e) => updateCourseType(index, e.target.value)}
-                    className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-2xl text-sm focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 font-medium transition-all duration-300 shadow-md shadow-gray-200/50"
                   >
                     {availableCourseTypes.map(type => (
                       <option key={type} value={type}>{type}</option>
@@ -274,15 +283,15 @@ export default function CourseEditor({ initialCourses, availableCourseTypes, onC
                 </div>
                 
                 {/* Waiver Percentage Dropdown */}
-                <div className="min-w-[80px]">
-                  <label className="block text-xs text-gray-600 mb-1">Waiver %</label>
+                <div className="min-w-[100px]">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Waiver %</label>
                   <select
                     value={course.waiverPercentage}
                     onChange={(e) => updateCourseWaiver(index, parseInt(e.target.value))}
-                    className={`w-full px-2 py-1 border rounded text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                    className={`w-full px-3 py-2 border rounded-2xl text-sm focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 font-semibold transition-all duration-300 shadow-md shadow-gray-200/50 ${
                       course.waiverPercentage === defaultWaiver && defaultWaiver > 0
-                        ? 'border-blue-300 bg-blue-50'
-                        : 'border-gray-300'
+                        ? 'border-blue-400 bg-gradient-to-r from-blue-50 to-blue-100 text-blue-800'
+                        : 'border-gray-300 bg-white'
                     }`}
                   >
                     {waiverOptions.map(percentage => (
@@ -298,17 +307,16 @@ export default function CourseEditor({ initialCourses, availableCourseTypes, onC
         ))}
       </div>
 
-      {/* Facebook-style Submit Button */}
+      {/* Modern Submit Button */}
       <div className="flex justify-center">
         <button
           onClick={handleSubmit}
-          className="bg-green-600 text-white px-8 py-3 rounded-md hover:bg-green-700 transition-colors flex items-center font-medium"
+          className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-10 py-4 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl shadow-green-500/30 flex items-center"
         >
-          <Check className="w-4 h-4 mr-2" />
+          <Check className="w-6 h-6 mr-3" />
           Calculate Payment
         </button>
       </div>
     </div>
-  </div>
-)
+  )
 }

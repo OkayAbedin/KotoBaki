@@ -45,32 +45,30 @@ export default function DirectEntry({ onDataExtracted, tableType, title, existin
   }
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200">
+    <div>
       {/* Header */}
-      <div className="px-4 py-3 border-b border-gray-200">
+      <div className="mb-8">
         <div className="flex items-center">
-          <div className="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center mr-3">
-            <Copy className="w-4 h-4 text-white" />
+          <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-3xl flex items-center justify-center mr-4 shadow-xl shadow-blue-500/30">
+            <Copy className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h2 className="text-base font-semibold text-gray-900">{title}</h2>
-            <p className="text-sm text-gray-500">Copy and paste data from your student portal</p>
+            <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
+            <p className="text-sm text-gray-600">Copy and paste data from your student portal</p>
           </div>
         </div>
       </div>
-
-      <div className="p-4">
         {/* Success message */}
         {hasData && existingData && existingData.length > 0 && (
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+          <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-3xl p-6 mb-8 shadow-xl shadow-green-200/50">
             <div className="flex items-start">
-              <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
-                <Check className="w-4 h-4 text-green-600" />
+              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-3xl flex items-center justify-center mr-4 shadow-lg shadow-green-500/30">
+                <Check className="w-6 h-6 text-white" />
               </div>
               <div className="flex-1">
-                <h3 className="font-medium text-green-800">Data Successfully Imported</h3>
-                <p className="text-sm text-green-700 mt-1">
-                  You have imported <span className="font-medium">{existingData.length}</span> {tableType === 'courses' ? 'courses' : 'payment items'}. 
+                <h3 className="font-bold text-green-800 text-lg">Data Successfully Imported</h3>
+                <p className="text-sm text-green-700 mt-2 leading-relaxed">
+                  You have imported <span className="font-bold">{existingData.length}</span> {tableType === 'courses' ? 'courses' : 'payment items'}. 
                   You can re-import below if you need to update the data.
                 </p>
               </div>
@@ -79,14 +77,14 @@ export default function DirectEntry({ onDataExtracted, tableType, title, existin
         )}
 
         {/* Instructions */}
-        <div className="bg-gray-50 rounded-lg p-3 mb-4">
-          <h3 className="font-medium text-gray-900 mb-2 flex items-center">
-            <div className="w-5 h-5 bg-blue-600 rounded-md flex items-center justify-center mr-2">
-              <span className="text-white text-xs">📋</span>
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3xl border border-blue-200 shadow-xl shadow-blue-200/50 p-6 mb-8">
+          <h3 className="font-bold text-gray-900 mb-6 text-lg flex items-center">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mr-3 shadow-lg shadow-blue-500/30">
+              <span className="text-white text-lg">📋</span>
             </div>
             How to Import Data
           </h3>
-          <div className="space-y-2">
+          <div className="space-y-4">
             {[
               "Go to your DIU student portal",
               `Find the ${tableType === 'payment' ? 'payment scheme' : 'course registration'} table`,
@@ -94,19 +92,19 @@ export default function DirectEntry({ onDataExtracted, tableType, title, existin
               "Copy the table (Ctrl+C or Cmd+C)",
               "Paste below and click Import Data"
             ].map((instruction, index) => (
-              <div key={index} className="flex items-center text-sm text-gray-700">
-                <div className="w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs font-medium mr-3 flex-shrink-0">
+              <div key={index} className="flex items-center text-sm text-gray-700 bg-white rounded-2xl p-4 shadow-md shadow-gray-200/50">
+                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center text-white text-sm font-bold mr-4 flex-shrink-0 shadow-lg shadow-blue-500/30">
                   {index + 1}
                 </div>
-                <span>{instruction}</span>
+                <span className="font-medium leading-relaxed">{instruction}</span>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Facebook-style Input Area */}
-        <div className="space-y-4">
-          <label className="block text-sm font-medium text-gray-700">
+        {/* Modern Input Area */}
+        <div className="space-y-6">
+          <label className="block text-lg font-semibold text-gray-900">
             Paste your {tableType === 'payment' ? 'payment scheme' : 'course registration'} data here:
           </label>
           <textarea
@@ -116,24 +114,24 @@ export default function DirectEntry({ onDataExtracted, tableType, title, existin
               ? "Example:\nSL\tPayment name\tCourse Type\tCourse Category\tAmount\n1\tAdmission Fee\tOthers\tOthers\t15000\n2\tTuition Fee\tCourse Fee\tCore\t4900"
               : "Example:\nSL\tCourse Code\tCourse Title\tCredit\tType\tSection\tTeacher\n1\tCSE110\tComputer Programming\t3\tREGULAR\t61_A\tTeacher Name\n2\tCSE111\tComputer Programming Lab\t1\tREGULAR\t61_A\tTeacher Name"
             }
-            className="w-full h-40 p-3 border border-gray-300 rounded-lg font-mono text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            className="w-full h-48 p-6 border border-gray-300 rounded-3xl font-mono text-sm resize-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 shadow-xl shadow-gray-200/50"
             disabled={isProcessing}
           />
           
-          <div className="flex gap-3">
+          <div className="flex gap-4">
             <button
               onClick={handlePortalPaste}
               disabled={!pasteText.trim() || isProcessing}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white px-4 py-2 rounded-md font-medium disabled:cursor-not-allowed transition-colors flex items-center justify-center"
+              className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-gray-300 disabled:to-gray-400 text-white px-6 py-4 rounded-2xl font-semibold text-lg disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-105 shadow-xl shadow-blue-500/30 disabled:shadow-gray-300/30 flex items-center justify-center"
             >
               {isProcessing ? (
                 <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  <div className="animate-spin rounded-full h-6 w-6 border-2 border-white border-t-transparent mr-3"></div>
                   Processing...
                 </>
               ) : (
                 <>
-                  <CheckCircle className="w-4 h-4 mr-2" />
+                  <CheckCircle className="w-6 h-6 mr-3" />
                   Import Data
                 </>
               )}
@@ -141,13 +139,12 @@ export default function DirectEntry({ onDataExtracted, tableType, title, existin
             <button
               onClick={() => setPasteText('')}
               disabled={isProcessing}
-              className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md font-medium disabled:opacity-50 transition-colors"
+              className="bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white px-6 py-4 rounded-2xl font-semibold text-lg disabled:opacity-50 transition-all duration-300 transform hover:scale-105 shadow-xl shadow-gray-500/30"
             >
               Clear
             </button>
           </div>
         </div>
-      </div>
     </div>
   )
 }
